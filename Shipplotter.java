@@ -11,16 +11,14 @@ public class Shipplotter {
 
     Shipplotter http = new  Shipplotter();
       while (true) {
-        System.out.println("\nTesting 2 - Send Http POST request");
         http.sendPost();
-        Thread.sleep(5000L); //time i mm sec before each request
+        Thread.sleep(30000L); //time i mm sec before each request
     }
   }
 
   // HTTP POST request
+  void sendPost() throws Exception {
     Date date = new Date();
-
-    void sendPost() throws Exception {
     String filename = "shiplog.csv";
     String url = "http://www.coaa.co.uk/shipinfo.php";
     URL obj = new URL(url);
@@ -42,9 +40,6 @@ public class Shipplotter {
     wr.close();
 
     int responseCode = con.getResponseCode();
-    System.out.println("\nSending 'POST' request to URL : " + url);
-    System.out.println("Post parameters : " + urlParameters);
-    System.out.println("Response Code : " + responseCode);
 
     BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
     String ln;
@@ -54,17 +49,17 @@ public class Shipplotter {
         {
           ln = (ln.substring(0, 23) + " 0" + ln.substring(24));
         }
-      ln = (ln.substring(0, 9) + "," + ln.substring(10, 20) + "," + ln.substring(21, 23) + "," + ln.substring(24, 27) + "," +
+      ln = ("\n" + ln.substring(0, 9) + "," + ln.substring(10, 20) + "," + ln.substring(21, 23) + "," + ln.substring(24, 27) + "," +
             ln.substring(29, 38) + "," + ln.substring(41, 50) + "," + ln.substring(51, 56) + "," + ln.substring(57,62) + "," +
             ln.substring(63, 66) + "," + ln.substring(67, 71) + "," + ln.substring(72, 75) + "," + ln.substring(76, 78) + "," + 
             ln.substring(79, 99) + "," + ln.substring(100, 107) + "," + ln.substring(108, 128) + "," + ln.substring(129,134) + "," + 
             ln.substring(135, 140) + "," + ln.substring(141, 142) + "," + ln.substring(143, 150) + "," + ln.substring(151,154) + "," + 
-            ln.substring(155, 157) + "," + ln.substring(158, 159) + "," + date.toString() + "\n");
+            ln.substring(155, 157) + "," + ln.substring(158, 159) + "," + date.toString());
 
       out.write(ln);
 
       //String newInputLine = inputLine.replace("  ", "");
-      System.out.println(ln);
+      System.out.print(ln);
     }
     in.close();
     out.flush();
