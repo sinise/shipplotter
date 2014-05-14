@@ -4,18 +4,15 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 import java.util.Date;
 public class Shipplotter {
+private final String USER_AGENT = "Mozilla/5.0";
 
-  private final String USER_AGENT = "Mozilla/5.0";
-
-  public static void main(String[] args) throws Exception {
-
-    Shipplotter http = new  Shipplotter();
-      while (true) {
-        http.sendPost();
-        Thread.sleep(30000L); //time i mm sec before each request
+public static void main(String[] args) throws Exception {
+  Shipplotter http = new  Shipplotter();
+    while (true) {
+      http.sendPost();
+      Thread.sleep(30000L); //time i mm sec before each request
     }
-  }
-
+}
   // HTTP POST request
   void sendPost() throws Exception {
     Date date = new Date();
@@ -66,8 +63,6 @@ public class Shipplotter {
     out.close();
 
     //print result
-    System.out.println(response.toString());
-
   }
 
 }
