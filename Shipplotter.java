@@ -51,7 +51,7 @@ public static void main(String[] args) throws Exception {
             ln.substring(63, 66) + "," + ln.substring(67, 71) + "," + ln.substring(72, 75) + "," + ln.substring(76, 78) + "," + 
             ln.substring(79, 99) + "," + ln.substring(100, 107) + "," + ln.substring(108, 128) + "," + ln.substring(129,134) + "," + 
             ln.substring(135, 140) + "," + ln.substring(141, 142) + "," + ln.substring(143, 150) + "," + ln.substring(151,154) + "," + 
-            ln.substring(155, 157) + "," + ln.substring(158, 159) + "," + date.toString()) + "," + date.getTime();
+            ln.substring(155, 157) + "," + ln.substring(158, 159));
 
       out.write(ln);
 
