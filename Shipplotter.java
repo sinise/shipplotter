@@ -40,16 +40,17 @@ try
     System.out.println("SQL Connection to database established!");
     int size = (lnList.size() - 1);
     for (int i = 0; i < size; i++) {
-      String thisLn = lnList.get(i);
+      String line = lnList.get(i);
+      String[] la = line.split(",")
       String sql = "INSERT IGNORE INTO shipplotter " +
-                   "VALUES ('"thisLn"')";
+                   "VALUES ('"+la[0]+"')";
       stmt.executeUpdate(sql);
       System.out.println(thisLn);
 
     }
   } catch (SQLException e) {
     System.out.println("Connection Failed! Check output console");
-//    System.out.println(e);
+    System.out.println(e);
     return;
   } finally {
     try 
