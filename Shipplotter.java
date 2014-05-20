@@ -5,22 +5,22 @@ import javax.net.ssl.HttpsURLConnection;
 import java.util.Date;
 import java.util.ArrayList;
 import java.sql.*;
-
 public class Shipplotter {
 private final String USER_AGENT = "Mozilla/5.0";
 
 public static void main(String[] args) throws Exception {
   Shipplotter http = new  Shipplotter();
 
-  http.uploadToDb("sdfsfsafsa");
 
     while (true) {
-      http.sendPost();
+      ArrayList<String> lnArrayList = http.sendPost();
+      http.uploadToDb(lnArrayList);
       Thread.sleep(15000L); //time i mm sec before each request
+
     }
 }
 
-private void uploadToDb(String ln) throws Exception {
+private void uploadToDb(ArrayList<String> lnList) throws Exception {
 try
   {
     Class.forName("com.mysql.jdbc.Driver");
@@ -31,24 +31,37 @@ try
   }
   System.out.println("MySQL JDBC Driver Registered!");
   Connection connection = null;
-  try {
-    connection = DriverManager.getConnection("jdbc:mysql://10.1.1.22:3306/shipplotter", "shipplotter", "shipplotter");
-      System.out.println("SQL Connection to database established!");
+  Statement stmt = null;
 
-    } catch (SQLException e) {
-      System.out.println("Connection Failed! Check output console");
-      return;
-    } finally {
-      try 
-      {
-        if(connection != null)
-          connection.close();
+  //connect and upload data
+  try {
+    connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
+    stmt = connection.createStatement();
+    System.out.println("SQL Connection to database established!");
+    int size = (lnList.size() - 1);
+    for (int i = 0; i < size; i++) {
+      String thisLn = lnList.get(i);
+      String sql = "INSERT IGNORE INTO shipplotter " +
+                   "VALUES (10,2,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3)";
+      stmt.executeUpdate(sql);
+      System.out.println(thisLn);
+
+    }
+  } catch (SQLException e) {
+    System.out.println("Connection Failed! Check output console");
+//    System.out.println(e);
+    return;
+  } finally {
+    try 
+    {
+      if(connection != null)
+        connection.close();
         System.out.println("Connection closed !!");
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
   }
+}
 
 // HTTP POST request
 private ArrayList<String> sendPost() throws Exception {
@@ -94,7 +107,7 @@ private ArrayList<String> sendPost() throws Exception {
     out.write(ln);
     output.add(ln);
     //String newInputLine = inputLine.replace("  ", "");
-    System.out.print(ln);
+//    System.out.print(ln);
   }
   in.close();
   out.flush();
