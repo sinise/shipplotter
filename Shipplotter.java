@@ -14,13 +14,20 @@ public static void main(String[] args) throws Exception {
 
     while (true) {
       ArrayList<String> lnArrayList = http.sendPost();
-      http.uploadToDb(lnArrayList);
+      for (int i = 0; i < lnArrayList.size(); i++) {
+        http.uploadToDb(lnArrayList.get(i));
+      }
       Thread.sleep(15000L); //time i mm sec before each request
 
     }
 }
 
-private void uploadToDb(ArrayList<String> lnList) throws Exception {
+private void uploadToDb(String line) throws Exception {
+  Connection connect = null;
+  Statement statement = null;
+  PreparedStatement preparedStatement = null;
+  ResultSet resultSet = null;
+
 try
   {
     Class.forName("com.mysql.jdbc.Driver");
@@ -29,6 +36,7 @@ try
     System.out.println("MySQL JDBC Driver not found !!");
     return;
   }
+
   System.out.println("MySQL JDBC Driver Registered!");
   Connection connection = null;
   Statement stmt = null;
@@ -36,18 +44,44 @@ try
   //connect and upload data
   try {
     connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
-    stmt = connection.createStatement();
+    statement = connection.createStatement();
     System.out.println("SQL Connection to database established!");
-    int size = (lnList.size() - 1);
-    for (int i = 0; i < size; i++) {
-      String line = lnList.get(i);
-      String[] la = line.split(",")
-      String sql = "INSERT IGNORE INTO shipplotter " +
-                   "VALUES ('"+la[0]+"')";
-      stmt.executeUpdate(sql);
-      System.out.println(thisLn);
+    resultSet = statement.executeQuery("select * from shipplotter");
+//    writeResultSet(resultSet);
 
-    }
+
+      String line1 = line;
+      String[] la = line1.split(",");
+
+      preparedStatement = connect
+          .prepareStatement("insert into shipplotter values (default, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
+      preparedStatement.setString(1, la[0]);
+      preparedStatement.setString(2, la[1]);
+      preparedStatement.setString(3, la[2]);
+      preparedStatement.setString(4, la[3]);
+      preparedStatement.setString(5, la[4]);
+      preparedStatement.setString(6, la[5]);
+      preparedStatement.setString(7, la[6]);
+      preparedStatement.setString(8, la[7]);
+      preparedStatement.setString(9, la[8]);
+      preparedStatement.setString(10, la[9]);
+      preparedStatement.setString(11, la[10]);
+      preparedStatement.setString(12, la[11]);
+      preparedStatement.setString(13, la[12]);
+      preparedStatement.setString(14, la[13]);
+      preparedStatement.setString(15, la[14]);
+      preparedStatement.setString(16, la[15]);
+      preparedStatement.setString(17, la[16]);
+      preparedStatement.setString(18, la[17]);
+      preparedStatement.setString(19, la[18]);
+      preparedStatement.setString(20, la[19]);
+      preparedStatement.setString(21, la[20]);
+      preparedStatement.setString(22, la[21]);
+
+      preparedStatement.executeUpdate();
+
+
+
   } catch (SQLException e) {
     System.out.println("Connection Failed! Check output console");
     System.out.println(e);
@@ -63,6 +97,7 @@ try
     }
   }
 }
+
 
 // HTTP POST request
 private ArrayList<String> sendPost() throws Exception {
