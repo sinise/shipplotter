@@ -42,7 +42,7 @@ try
     for (int i = 0; i < size; i++) {
       String thisLn = lnList.get(i);
       String sql = "INSERT IGNORE INTO shipplotter " +
-                   "VALUES (10,2,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3,2,3)";
+                   "VALUES ('"thisLn"')";
       stmt.executeUpdate(sql);
       System.out.println(thisLn);
 
