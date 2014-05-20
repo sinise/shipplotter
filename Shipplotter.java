@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.sql.*;
 public class Shipplotter
 {
+  private final String USER_AGENT = "Mozilla/5.0";
+
   public static void main(String[] args) throws Exception
   {
     Shipplotter http = new  Shipplotter();
-    private final String USER_AGENT = "Mozilla/5.0";
-
     while (true)
     {
       String[] output = http.sendPost();
@@ -26,7 +26,6 @@ public class Shipplotter
 
   private void uploadToDb(String line) throws Exception
   {
-    Connection connect = null;
     Statement statement = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
@@ -52,14 +51,18 @@ public class Shipplotter
       resultSet = statement.executeQuery("select * from shipplotter");
 //    writeResultSet(resultSet);
       String[] la = line.split(",");
+	System.out.printf("length is %d", la.length);
+//      for (int i = 0; i < la.length; i++)
+//      {
+//        System.out.println(la[i]);
+//      }
+      System.out.println(line);
+//      System.out.println(la[0]);
+//      System.out.println("this was mmsi");
 
-      for (int i = 0; i < la.length; i++)
-      {
-        System.out.println(la[i]);
-      }
-
-
-      preparedStatement = connect.prepareStatement("insert into shipplotter values (default, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
+//      int mmsi = Integer.parseInt(la[0]);
+//      System.out.printf("this is the mmsi as in %d", mmsi);
+      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO shipplotter values (?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
       preparedStatement.setString(1, la[0]);
       preparedStatement.setString(2, la[1]);
       preparedStatement.setString(3, la[2]);
