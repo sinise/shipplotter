@@ -13,9 +13,10 @@ public static void main(String[] args) throws Exception {
 
 
     while (true) {
-      ArrayList<String> lnArrayList = http.sendPost();
-      for (int i = 0; i < lnArrayList.size(); i++) {
-        http.uploadToDb(lnArrayList.get(i));
+      String[] output = http.sendPost();
+      for (int i = 0; i < output.length; i++) {
+        http.uploadToDb(output[i]);
+//        System.out.println(output[i]);
       }
       Thread.sleep(15000L); //time i mm sec before each request
 
@@ -50,11 +51,9 @@ try
 //    writeResultSet(resultSet);
 
 
-      String line1 = line;
-      String[] la = line1.split(",");
+      String[] la = line.split(",");
 
-      preparedStatement = connect
-          .prepareStatement("insert into shipplotter values (default, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
+      preparedStatement = connect.prepareStatement("insert into shipplotter values (default, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
       preparedStatement.setString(1, la[0]);
       preparedStatement.setString(2, la[1]);
       preparedStatement.setString(3, la[2]);
@@ -100,15 +99,14 @@ try
 
 
 // HTTP POST request
-private ArrayList<String> sendPost() throws Exception {
+public String[] sendPost() throws Exception {
   Date date = new Date();
   String filename = "shiplog.csv";
   String url = "http://www.coaa.co.uk/shipinfo.php";
   URL obj = new URL(url);
   HttpURLConnection con = (HttpURLConnection) obj.openConnection();
   Writer out = new FileWriter(filename, true);
-  ArrayList<String> output = new ArrayList<String>();
-
+  ArrayList<String> thisout = new ArrayList<String>();
   //add reuqest header
   con.setRequestMethod("POST");
   con.setRequestProperty("User-Agent", USER_AGENT);
@@ -141,14 +139,19 @@ private ArrayList<String> sendPost() throws Exception {
           ln.substring(155, 157) + "," + ln.substring(158, 159));
 
     out.write(ln);
-    output.add(ln);
+    thisout.add(ln);
     //String newInputLine = inputLine.replace("  ", "");
 //    System.out.print(ln);
   }
   in.close();
   out.flush();
   out.close();
-  return output;
+
+  String[] returnArray = new String[thisout.size()];
+  returnArray = thisout.toArray(returnArray);
+//  for(String s : returnArray)
+//    System.out.println(s);
+  return returnArray;
 
   //print result
 }
