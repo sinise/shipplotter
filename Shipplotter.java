@@ -5,53 +5,59 @@ import javax.net.ssl.HttpsURLConnection;
 import java.util.Date;
 import java.util.ArrayList;
 import java.sql.*;
-public class Shipplotter {
-private final String USER_AGENT = "Mozilla/5.0";
+public class Shipplotter
+{
+  public static void main(String[] args) throws Exception
+  {
+    Shipplotter http = new  Shipplotter();
+    private final String USER_AGENT = "Mozilla/5.0";
 
-public static void main(String[] args) throws Exception {
-  Shipplotter http = new  Shipplotter();
-
-
-    while (true) {
+    while (true)
+    {
       String[] output = http.sendPost();
-      for (int i = 0; i < output.length; i++) {
+      for (int i = 0; i < output.length; i++)
+      {
         http.uploadToDb(output[i]);
-//        System.out.println(output[i]);
+//      System.out.println(output[i]);
       }
       Thread.sleep(15000L); //time i mm sec before each request
-
     }
-}
+  }
 
-private void uploadToDb(String line) throws Exception {
-  Connection connect = null;
-  Statement statement = null;
-  PreparedStatement preparedStatement = null;
-  ResultSet resultSet = null;
-
-try
+  private void uploadToDb(String line) throws Exception
   {
-    Class.forName("com.mysql.jdbc.Driver");
-  }
-  catch (ClassNotFoundException e) {
-    System.out.println("MySQL JDBC Driver not found !!");
-    return;
-  }
+    Connection connect = null;
+    Statement statement = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
 
-  System.out.println("MySQL JDBC Driver Registered!");
-  Connection connection = null;
-  Statement stmt = null;
+    try
+      {
+        Class.forName("com.mysql.jdbc.Driver");
+      }
+      catch (ClassNotFoundException e) {
+        System.out.println("MySQL JDBC Driver not found !!");
+        return;
+      }
 
-  //connect and upload data
-  try {
-    connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
-    statement = connection.createStatement();
-    System.out.println("SQL Connection to database established!");
-    resultSet = statement.executeQuery("select * from shipplotter");
+      System.out.println("MySQL JDBC Driver Registered!");
+      Connection connection = null;
+      Statement stmt = null;
+
+    //connect and upload data
+    try {
+      connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
+      statement = connection.createStatement();
+      System.out.println("SQL Connection to database established!");
+      resultSet = statement.executeQuery("select * from shipplotter");
 //    writeResultSet(resultSet);
-
-
       String[] la = line.split(",");
+
+      for (int i = 0; i < la.length; i++)
+      {
+        System.out.println(la[i]);
+      }
+
 
       preparedStatement = connect.prepareStatement("insert into shipplotter values (default, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
       preparedStatement.setString(1, la[0]);
@@ -76,25 +82,22 @@ try
       preparedStatement.setString(20, la[19]);
       preparedStatement.setString(21, la[20]);
       preparedStatement.setString(22, la[21]);
-
       preparedStatement.executeUpdate();
 
-
-
-  } catch (SQLException e) {
-    System.out.println("Connection Failed! Check output console");
-    System.out.println(e);
-    return;
-  } finally {
-    try 
-    {
-      if(connection != null)
-        connection.close();
-        System.out.println("Connection closed !!");
     } catch (SQLException e) {
-      e.printStackTrace();
+      System.out.println("Connection Failed! Check output console");
+      System.out.println(e);
+      return;
+    } finally {
+      try 
+      {
+        if(connection != null)
+          connection.close();
+          System.out.println("Connection closed !!");
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
     }
-  }
 }
 
 
