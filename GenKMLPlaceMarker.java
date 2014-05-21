@@ -35,10 +35,8 @@ public class GenKMLPlaceMarker {
 		Statement stmt;
 		ResultSet rs;
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
-		Calendar calendar = Calendar.getInstance();
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-		SimpleDateFormat format2 = new SimpleDateFormat("HH");
 
 
 		try {
@@ -93,9 +91,7 @@ public class GenKMLPlaceMarker {
 				KML.lng = rs.getFloat("lon");
 				KML.type = rs.getString("type");
 
-//				calendar.setTimeInMillis(KML.timestamp);
-				String formated = format.format(KML.timestamp * 1000);
-				System.out.println(formated);
+				String formatedTime = format.format(KML.timestamp * 1000);
 
 				Element placemark = doc.createElement("Placemark");
 				dnode.appendChild(placemark);
@@ -112,9 +108,12 @@ public class GenKMLPlaceMarker {
 				styleUrl.appendChild(doc.createTextNode( "#" + KML.type+ "Style"));
 				placemark.appendChild(styleUrl);
 
-				Element timestamp = doc.createElement("timestamp");
-				timestamp.appendChild(doc.createTextNode(KML.timestamp + ""));
-				placemark.appendChild(timestamp);
+
+				Element TimeStamp = doc.createElement("TimeStamp");
+				Element when = doc.createElement("when");
+				when.appendChild(doc.createTextNode(formatedTime + ""));
+				TimeStamp.appendChild(when);
+				placemark.appendChild(TimeStamp);
 
 
 				Element point = doc.createElement("Point");
