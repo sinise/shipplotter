@@ -32,7 +32,7 @@ public class SqlToLog {
             String course;
             String heading;
             int count = 0;
-            DateFormat df = new SimpleDateFormat("ddMMyyyy");
+            DateFormat df = new SimpleDateFormat("yyMMdd HHmmss");
 
             while (rs.next()) {
                 mmsi = rs.getString(1);
