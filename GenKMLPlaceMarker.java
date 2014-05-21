@@ -15,7 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import com.google.marker;
+//import com.google.marker;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -76,11 +76,11 @@ public class GenKMLPlaceMarker {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi=219000062");
 			while(rs.next()){
-				KML.id = rs.getInt("id");
+				KML.id = rs.getInt("mmsi");
 				KML.name = rs.getString("name");
-				KML.address = rs.getString("address");
+				KML.address = rs.getString("dest");
 				KML.lat = rs.getFloat("lat");
-				KML.lng = rs.getFloat("lng");
+				KML.lng = rs.getFloat("lon");
 				KML.type = rs.getString("type");
 
 				Element placemark = doc.createElement("Placemark");
@@ -101,7 +101,7 @@ public class GenKMLPlaceMarker {
 				placemark.appendChild(point);
 			}
 			Source src = new DOMSource(doc);
-			Result dest = new StreamResult(new File("c:/PlaceMarkers.kml")); 
+			Result dest = new StreamResult(new File("PlaceMarkers.kml")); 
 			aTransformer.transform(src, dest);
 			System.out.println("Completed.....");
 		} catch (Exception e){
