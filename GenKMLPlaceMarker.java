@@ -23,10 +23,11 @@ import org.w3c.dom.Element;
 public class GenKMLPlaceMarker {
 	public int id;
 	public String name;
-	public String address;
+	public String dest;
 	public float lat;
 	public float lng;
 	public String type;
+	public int timestamp;
 
 	public static void main(String[]args ){
 		Statement stmt;
@@ -77,29 +78,40 @@ public class GenKMLPlaceMarker {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi=219000062");
 			while(rs.next()){
+				KML.timestamp = rs.getInt("timestamp");
 				KML.id = rs.getInt("mmsi");
 				KML.name = rs.getString("name");
-				KML.address = rs.getString("dest");
+				KML.dest = rs.getString("dest");
 				KML.lat = rs.getFloat("lat");
 				KML.lng = rs.getFloat("lon");
 				KML.type = rs.getString("type");
 
 				Element placemark = doc.createElement("Placemark");
 				dnode.appendChild(placemark);
+
 				Element name = doc.createElement("name");
 				name.appendChild(doc.createTextNode(KML.name));
 				placemark.appendChild(name);
+
 				Element descrip = doc.createElement("description");
-				descrip.appendChild(doc.createTextNode(KML.address));
+				descrip.appendChild(doc.createTextNode(KML.dest));
 				placemark.appendChild(descrip);
+
 				Element styleUrl = doc.createElement("styleUrl");
 				styleUrl.appendChild(doc.createTextNode( "#" + KML.type+ "Style"));
 				placemark.appendChild(styleUrl);
+
+				Element timestamp = doc.createElement("timestamp");
+				timestamp.appendChild(doc.createTextNode(KML.timestamp + ""));
+				placemark.appendChild(timestamp);
+
+
 				Element point = doc.createElement("Point");
 				Element coordinates = doc.createElement("coordinates");
 				coordinates.appendChild(doc.createTextNode(KML.lng+ "," + KML.lat));
 				point.appendChild(coordinates);
 				placemark.appendChild(point);
+
 			}
 			Source src = new DOMSource(doc);
 			Result dest = new StreamResult(new File("PlaceMarkers.kml")); 
