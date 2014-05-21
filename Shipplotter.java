@@ -57,6 +57,9 @@ public class Shipplotter
 //        System.out.println(la[i]);
 //      }
       System.out.println(line);
+      System.out.println("----------------------");
+      System.out.printf("this os mmsi---%s", la[0]);
+      System.out.println("----------------------");
 //      System.out.println(la[0]);
 //      System.out.println("this was mmsi");
 
@@ -107,11 +110,11 @@ public class Shipplotter
 // HTTP POST request
 public String[] sendPost() throws Exception {
   Date date = new Date();
-  String filename = "shiplog.csv";
+//  String filename = "shiplog.csv";
   String url = "http://www.coaa.co.uk/shipinfo.php";
   URL obj = new URL(url);
   HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-  Writer out = new FileWriter(filename, true);
+//  Writer out = new FileWriter(filename, true);
   ArrayList<String> thisout = new ArrayList<String>();
   //add reuqest header
   con.setRequestMethod("POST");
@@ -137,26 +140,24 @@ public String[] sendPost() throws Exception {
       {
         ln = (ln.substring(0, 23) + " 0" + ln.substring(24));
       }
-    ln = ("\n" + ln.substring(0, 9) + "," + ln.substring(10, 20) + "," + ln.substring(21, 23) + "," + ln.substring(24, 27) + "," +
+    ln = (ln.substring(0, 9) + "," + ln.substring(10, 20) + "," + ln.substring(21, 23) + "," + ln.substring(24, 27) + "," +
           ln.substring(29, 38) + "," + ln.substring(41, 50) + "," + ln.substring(51, 56) + "," + ln.substring(57,62) + "," +
           ln.substring(63, 66) + "," + ln.substring(67, 71) + "," + ln.substring(72, 75) + "," + ln.substring(76, 78) + "," + 
           ln.substring(79, 99) + "," + ln.substring(100, 107) + "," + ln.substring(108, 128) + "," + ln.substring(129,134) + "," + 
           ln.substring(135, 140) + "," + ln.substring(141, 142) + "," + ln.substring(143, 150) + "," + ln.substring(151,154) + "," + 
           ln.substring(155, 157) + "," + ln.substring(158, 159));
 
-    out.write(ln);
+//    out.write(ln);
     thisout.add(ln);
     //String newInputLine = inputLine.replace("  ", "");
 //    System.out.print(ln);
   }
   in.close();
-  out.flush();
-  out.close();
+//  out.flush();
+//  out.close();
 
   String[] returnArray = new String[thisout.size()];
   returnArray = thisout.toArray(returnArray);
-//  for(String s : returnArray)
-//    System.out.println(s);
   return returnArray;
 
   //print result
