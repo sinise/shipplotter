@@ -1,4 +1,4 @@
-import java.io.*;
+9import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
@@ -54,12 +54,10 @@ public class ShipplotterCsvParser
 //    writeResultSet(resultSet);
       String[] la = line.split(",");
 	System.out.printf("length is %d", la.length);
-//      for (int i = 0; i < la.length; i++)
-//      {
-//        System.out.println(la[i]);
-//      }
       System.out.println(line);
-//      System.out.println(la[0]);
+      System.out.println("sssssssssssssssssssssssssss");
+      System.out.prinntf"this is mmsi% d", la[0]);
+      System.out.println("sssssssssssssssssssssssssss");
 //      System.out.println("this was mmsi");
 
 //      int mmsi = Integer.parseInt(la[0]);
