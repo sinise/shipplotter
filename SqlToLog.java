@@ -48,7 +48,16 @@ public class SqlToLog {
                 {
                   mmsi = "0" + mmsi;
                 }
-                Date time = new Date(timestamp);
+                while (lat.length() < 9)
+                {
+                  lat = lat + "0";
+                } 
+
+                while (lat.length() < 9)
+                {
+                  lon = lon + "0";
+                } 
+               Date time = new Date(timestamp);
                 String ftime = df.format(time);
                 if (mmsi.length() < 9)
                   count++;
