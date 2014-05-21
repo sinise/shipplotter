@@ -1,4 +1,4 @@
-9import java.io.*;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
@@ -13,13 +13,14 @@ public class ShipplotterCsvParser
   public static void main(String[] args) throws Exception
   {
     ShipplotterCsvParser http = new  ShipplotterCsvParser();
-    String inputFile = args[0];
-
+    String inputFileName = args[0];
+    File inputFile =new File(inputFileName);
     Scanner in = new Scanner(inputFile);
 
     while (in.hasNext())
     {
       String ln = in.nextLine();
+//      System.out.println(ln);
       http.uploadToDb(ln);
 //      System.out.println(output[i]);
     }
@@ -53,10 +54,10 @@ public class ShipplotterCsvParser
       resultSet = statement.executeQuery("select * from shipplotter");
 //    writeResultSet(resultSet);
       String[] la = line.split(",");
-	System.out.printf("length is %d", la.length);
+      System.out.printf("length is %d", la.length);
       System.out.println(line);
       System.out.println("sssssssssssssssssssssssssss");
-      System.out.prinntf"this is mmsi% d", la[0]);
+      System.out.printf("this is mmsi ----%s---", la[0]);
       System.out.println("sssssssssssssssssssssssssss");
 //      System.out.println("this was mmsi");
 

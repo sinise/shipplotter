@@ -21,11 +21,33 @@ public class SqlToLog {
             con = DriverManager.getConnection(url, user, password);
             pst = con.prepareStatement("SELECT mmsi,timestamp,status,type,lat,lon,speed,course,heading FROM shipplotter WHERE type=33");
             rs = pst.executeQuery();
-
+            String mmsi;
+            int timestamp;
+            int status;
+            int type;
+            String lat;
+            String lon;
+            String speed;
+            String course;
+            String heading;
+            int count = 0;
             while (rs.next()) {
-                System.out.print(rs.getInt(1));
-                System.out.print(": ");
-                System.out.println(rs.getString(2));
+                mmsi = rs.getString(1);
+                timestamp = rs.getInt(2);
+                status = rs.getInt(3);
+                type = rs.getInt(4);
+                lat = rs.getString(5);
+                lon = rs.getString(6);
+                speed = rs.getString(7);
+                course = rs.getString(8);
+                heading = rs.getString(9);
+                while (mmsi.length() < 9)
+                {
+                  mmsi = "0" + mmsi;
+                }
+                if (mmsi.length() < 9)
+                  count++;
+                System.out.println(mmsi + ";" + timestamp + ";" + status + ";" + type + ";" + lat + ";" + lon + ";" + speed + ";" + course + ";" + heading + ";" + count);
             }
 
         } catch (SQLException ex) {

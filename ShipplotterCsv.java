@@ -25,8 +25,8 @@ public class ShipplotterCsv
       {
         http.uploadToDb(ln);
         count++;
-        if((count % 100) == 0)
-          System.out.println(count);
+//        if((count % 100) == 0)
+        System.out.println(count);
       }
     }
   }
