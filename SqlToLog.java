@@ -19,8 +19,7 @@ public class SqlToLog {
 
         try {
             con = DriverManager.getConnection(url, user, password);
-            pst = con.prepareStatement("SELECT mmsi,timestamp,status,type,lat,long,speed,course,heading FROM shipplotter" +
-                                       "WHERE type=33 ORDER BY timestamp");
+            pst = con.prepareStatement("SELECT mmsi,timestamp,status,type,lat,lon,speed,course,heading FROM shipplotter WHERE type=33");
             rs = pst.executeQuery();
 
             while (rs.next()) {
@@ -47,7 +46,7 @@ public class SqlToLog {
                 }
 
             } catch (SQLException ex) {
-                Logger lgr = Logger.getLogger(SqlToLo.class.getName());
+                Logger lgr = Logger.getLogger(SqlToLog.class.getName());
                 lgr.log(Level.WARNING, ex.getMessage(), ex);
             }
         }
