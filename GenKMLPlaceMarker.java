@@ -14,6 +14,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.OutputKeys;
 
 //import com.google.marker;
 import org.w3c.dom.Document;
@@ -40,7 +41,7 @@ public class GenKMLPlaceMarker {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			TransformerFactory tranFactory = TransformerFactory.newInstance(); 
-		    Transformer aTransformer = tranFactory.newTransformer(); 
+		        Transformer aTransformer = tranFactory.newTransformer(); 
 
 			Document doc = builder.newDocument();
 			Element root = doc.createElement("kml");
@@ -102,6 +103,8 @@ public class GenKMLPlaceMarker {
 			}
 			Source src = new DOMSource(doc);
 			Result dest = new StreamResult(new File("PlaceMarkers.kml")); 
+			aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			aTransformer.transform(src, dest);
 			System.out.println("Completed.....");
 		} catch (Exception e){
