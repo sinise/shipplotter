@@ -5,7 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.text.*;
+import java.util.Date;
 public class SqlToLog {
     public static void main(String[] args) {
 
@@ -31,6 +32,8 @@ public class SqlToLog {
             String course;
             String heading;
             int count = 0;
+            DateFormat df = new SimpleDateFormat("ddMMyyyy");
+
             while (rs.next()) {
                 mmsi = rs.getString(1);
                 timestamp = rs.getInt(2);
@@ -45,9 +48,12 @@ public class SqlToLog {
                 {
                   mmsi = "0" + mmsi;
                 }
+                Date time = new Date(timestamp);
+                String ftime = df.format(time);
                 if (mmsi.length() < 9)
                   count++;
-                System.out.println(mmsi + ";" + timestamp + ";" + status + ";" + type + ";" + lat + ";" + lon + ";" + speed + ";" + course + ";" + heading + ";" + count);
+                System.out.println(mmsi + ";" + "under way " + ";" + "000�'" + ";" + speed + "kt" + ";" + lat + "N" + ";" + lon +
+                                   "E" + ";" + course + "�" + ";" + heading + "�" + ";" + "49s" + ";" + ftime + ";" + "audio[1]");
             }
 
         } catch (SQLException ex) {

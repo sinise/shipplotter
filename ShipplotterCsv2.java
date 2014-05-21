@@ -15,10 +15,11 @@ public class ShipplotterCsv2
   {
     ShipplotterCsv2 http = new  ShipplotterCsv2();
     String inputFileName = args[0];
-    File inputFile =new File(inputFileName);
-    Scanner in = new Scanner(inputFile);
+   // File inputFile = new File(inputFileName);
+   // Scanner in = new Scanner(inputFile);
+    BufferedReader in = new BufferedReader(new FileReader(inputFileName));
     int count = 0;
-
+    String ln;
 
 
 
@@ -37,15 +38,15 @@ public class ShipplotterCsv2
 
 
 
-    while (in.hasNext())
+    while ((ln = in.readLine()) != null)
     {
-      String ln = in.nextLine();
+      //ln = in.nextLine();
       ln = ln.replace("/n", "");
       if (ln.length() > 10)
       {
         count++;
         http.uploadToDb(ln);
-        if((count % 100) == 0)
+        if((count % 1000) == 0)
           System.out.println(count);
 
       }
