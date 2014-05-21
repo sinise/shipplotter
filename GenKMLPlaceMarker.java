@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,13 +29,18 @@ public class GenKMLPlaceMarker {
 	public float lat;
 	public float lng;
 	public String type;
-	public int timestamp;
+	public long timestamp;
 
 	public static void main(String[]args ){
 		Statement stmt;
 		ResultSet rs;
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
-		
+		Calendar calendar = Calendar.getInstance();
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		SimpleDateFormat format2 = new SimpleDateFormat("HH");
+
+
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://localhost/shipplotter";
@@ -76,15 +83,19 @@ public class GenKMLPlaceMarker {
 			dnode.appendChild(bstyle);
 			
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi=219000062");
+			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE type=33 ORDER BY timestamp");
 			while(rs.next()){
-				KML.timestamp = rs.getInt("timestamp");
+				KML.timestamp = rs.getLong("timestamp");
 				KML.id = rs.getInt("mmsi");
 				KML.name = rs.getString("name");
 				KML.dest = rs.getString("dest");
 				KML.lat = rs.getFloat("lat");
 				KML.lng = rs.getFloat("lon");
 				KML.type = rs.getString("type");
+
+//				calendar.setTimeInMillis(KML.timestamp);
+				String formated = format.format(KML.timestamp * 1000);
+				System.out.println(formated);
 
 				Element placemark = doc.createElement("Placemark");
 				dnode.appendChild(placemark);
