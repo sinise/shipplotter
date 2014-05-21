@@ -26,7 +26,7 @@ public class GenKMLLineString
     try
     {
       Class.forName("com.mysql.jdbc.Driver");
-      String url = "jdbc:mysql://10.1.1.22:3306/shipplotter";
+      String url = "jdbc:mysql://localhost/shipplotter";
       Connection con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       DocumentBuilder builder = factory.newDocumentBuilder();
@@ -67,7 +67,7 @@ public class GenKMLLineString
         cord.appendChild(doc.createTextNode(KML.lng + "," + KML.lat+",100 "));
       }
       Source src = new DOMSource(doc);
-      Result dest = new StreamResult(new File("c:/LineString.kml"));
+      Result dest = new StreamResult(new File("LineString.kml"));
       aTransformer.transform(src, dest);
       System.out.println("Completed.....");
     } catch (Exception e)
