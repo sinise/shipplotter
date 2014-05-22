@@ -53,11 +53,14 @@ public class SqlToLog {
                   lat = lat + "0";
                 } 
 
-                while (lat.length() < 9)
+                while (lon.length() < 9)
                 {
                   lon = lon + "0";
                 } 
-               Date time = new Date(timestamp);
+		if (speed.length() == 3)
+                  speed = speed + ".0";
+
+                Date time = new Date(timestamp);
                 String ftime = df.format(time);
                 if (mmsi.length() < 9)
                   count++;
