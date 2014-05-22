@@ -44,6 +44,7 @@ public class SqlToLog {
                 speed = rs.getString(7);
                 course = rs.getString(8);
                 heading = rs.getString(9);
+                timestamp = timestamp * 1000;
                 while (mmsi.length() < 9)
                 {
                   mmsi = "0" + mmsi;
