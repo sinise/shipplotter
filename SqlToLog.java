@@ -52,13 +52,16 @@ public class SqlToLog {
                 {
                   lat = lat + "0";
                 } 
-
                 while (lon.length() < 9)
                 {
                   lon = lon + "0";
                 } 
-		if (speed.length() == 3)
+		if (!speed.contains("."))
                   speed = speed + ".0";
+		while (speed.length() < 4)
+                {
+                  speed = " " +  speed;
+                }
 
                 Date time = new Date(timestamp);
                 String ftime = df.format(time);
