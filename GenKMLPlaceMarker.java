@@ -81,7 +81,7 @@ public class GenKMLPlaceMarker {
 			dnode.appendChild(bstyle);
 			
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE type=33 and timestamp<1400640000 and mmsi=219000062 ORDER BY timestamp");
+			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE type=33 ORDER BY timestamp");
 			while(rs.next()){
 				KML.timestamp = rs.getLong("timestamp");
 				KML.id = rs.getInt("mmsi");

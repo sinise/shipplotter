@@ -9,6 +9,7 @@ import java.sql.*;
 public class ShipplotterCsv
 {
   private final String USER_AGENT = "Mozilla/5.0";
+  /* uploads a csv file to the database*/
   public static void main(String[] args) throws Exception
   {
     ShipplotterCsv http = new  ShipplotterCsv();

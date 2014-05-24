@@ -47,19 +47,16 @@ public class Shipplotter
     try {
       connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
       statement = connection.createStatement();
-      System.out.println("SQL Connection to database established!");
+//      System.out.println("SQL Connection to database established!");
       resultSet = statement.executeQuery("select * from shipplotter");
 //    writeResultSet(resultSet);
       String[] la = line.split(",");
-	System.out.printf("length is %d", la.length);
+//	System.out.printf("length is %d", la.length);
 //      for (int i = 0; i < la.length; i++)
 //      {
 //        System.out.println(la[i]);
 //      }
       System.out.println(line);
-      System.out.println("----------------------");
-      System.out.printf("this os mmsi---%s", la[0]);
-      System.out.println("----------------------");
 //      System.out.println(la[0]);
 //      System.out.println("this was mmsi");
 
