@@ -32,7 +32,7 @@ public class SqlToLog {
             String course;
             String heading;
             int count = 0;
-            DateFormat df = new SimpleDateFormat("ddMMyyyy");
+            DateFormat df = new SimpleDateFormat("yyMMdd HHmmss");
 
             while (rs.next()) {
                 mmsi = rs.getString(1);
@@ -44,10 +44,26 @@ public class SqlToLog {
                 speed = rs.getString(7);
                 course = rs.getString(8);
                 heading = rs.getString(9);
+                timestamp = timestamp * 1000;
                 while (mmsi.length() < 9)
                 {
                   mmsi = "0" + mmsi;
                 }
+                while (lat.length() < 9)
+                {
+                  lat = lat + "0";
+                } 
+                while (lon.length() < 9)
+                {
+                  lon = lon + "0";
+                } 
+		if (!speed.contains("."))
+                  speed = speed + ".0";
+		while (speed.length() < 4)
+                {
+                  speed = " " +  speed;
+                }
+
                 Date time = new Date(timestamp);
                 String ftime = df.format(time);
                 if (mmsi.length() < 9)
