@@ -9,58 +9,52 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
 
-public class Main {
+public class MarineTraficCrawler {
   public static void main(String[] args) throws Exception {
 
 
   ArrayList<String> list = new ArrayList<String>();
-  URL oracle = new URL("http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:230964000/shipname:FUTURA");
-  BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+//  BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 
-  CharSequence ch = "<a class=\"thumbnailContainerInner\" href=";
-  String inputLine;
-  String inputLine2;
+    URL url;
+    URLConnection uc;
 
+    String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:230964000/shipname:FUTURA";
+    String regEx = "<td><span>";
+    String regStartLine = "<tr><td><span>";
+    System.out.println("Getting content for URl : " + urlString);
+    url = new URL(urlString);
+    uc = url.openConnection();
+    uc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+    uc.connect();
+    uc.getInputStream();
+    BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+    String ch;
+    String parsedData = "";
 
-  while ((inputLine = in.readLine()) != null) {
-//    String curentLine = inputLine;
-//    boolean contain = (curentLine.contains(ch));
-    if (inputline.contains(ch)) {
-      list.add(curentLine);
-//      System.out.println(curentLine);
-    }
-  }
+    while ((ch = in.readLine()) != null) {
+      if (ch.contains(regEx)) {
 
-  int count = 0;
-  while (true) {
-    BufferedReader in2 = new BufferedReader(new InputStreamReader(oracle.openStream()));
-    count++;
+        int indexEnd = ch.lastIndexOf("</span>");
+        int  indexStart = ch.indexOf("<span>") + 6;
+        if (ch.contains(regStartLine)) {
 
-    try {
-      Thread.sleep(10000L);    // 4 second
-    }
-      catch (Exception e) {}     // this never happen... nobody check for it
-    while ((inputLine2 = in2.readLine()) != null) {
-      String curentLine = inputLine2;
-      boolean contain = (curentLine.contains(ch));
-      if (contain) {
- 
-        if (!list.contains(curentLine)) {
-          list.add(curentLine);
-          System.out.printf("%d \n", count);
-          System.out.println("   ");
-          System.out.println(curentLine);
-          System.out.println("\n/n/N");
-          while (nBytesRead != -1) {
-            nBytesRead = audio.read(abData, 0, abData.length);
-          if (nBytesRead >= 0) {
-            auline.write(abData, 0, nBytesRead);
-          }
-          }
+          list.add(parsedData);
+          parsedData = ch.substring(indexStart, indexEnd);
+
+//          parsedData = ch;
         }
-      }
-    }
-  }
+        else {
+          parsedData = parsedData + ("," + ch.substring(indexStart, indexEnd));
+//          parsedData = parsedData + ("," + ch);
+        }
 
+      }
+//      System.out.print(parsedData);
+    }
+    for (int i = 0; i < list.size(); i++) {
+      System.out.println(list.get(i));
+    }
+    System.out.printf("listen er %d lanf", list.size());
 }
 }
