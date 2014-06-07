@@ -7,73 +7,63 @@ import java.text.SimpleDateFormat;
 
 public class MarineTraficCrawler {
   public static void main(String[] args) throws Exception {
+    ArrayList<MarinetraficShip> shipsHtml = new ArrayList<MarinetraficShip>();
+    ArrayList<MarinetraficShip> shipsUrl = new  ArrayList<MarinetraficShip>();
+    ArrayList<String> errors = new ArrayList<String>();
 
-    ArrayList<String> returnedList = fetchMarineTrafic(1);
-
-    for (int i = 0; i < returnedList.size(); i++) {
-     System.out.println(returnedList.get(i));
+    //if wrong argument size
+    if (args.length != 1) {
+      System.out.println("wrong argument specification \n Use: MarineTraficCrawler.java file");
+      System.out.println("where file is a comma seperatet text file in this format <mmsi>,<name>,<html file>");
+      System.out.println("html file is optional. if not provided data will be fetched from Marinetrafic.com");
     }
 
 
-  }
-  /**
-   * fetch content from Marinetrafic. either from a saved html file or from url
-   * @param choice 0 to fecch online 1 to fetch from file
-   */
-  public static ArrayList<String> fetchMarineTrafic(int choice){
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    ArrayList<String> list = new ArrayList<String>();
-    BufferedReader in;
+    try {
+      //get the file containing list of ships
+      String file = args[0];
+      String ship;
+      FileInputStream fstream = new FileInputStream(args[0]);
+      DataInputStream fin = new DataInputStream(fstream);
+      BufferedReader in = new BufferedReader(new InputStreamReader(fin));
 
-    try{
-      if (choice == 0) {
-        URL url;
-        URLConnection uc;
-        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:230964000/shipname:FUTURA/per_page:3000/page:1";
-        url = new URL(urlString);
-        uc = url.openConnection();
-        uc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
-        uc.connect();
-        in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+      //For each ship create a MarinetraficShip object and place it in the apporpriate array list 
+      // for either html or url source
+      while ((ship = in.readLine()) != null) {
+        String[] newShip = ship.split(",");
+        if (newShip.length == 3) {
+          shipsHtml.add(new MarinetraficShip(newShip[0], newShip[1], newShip[0]));
+        }
+        if (newShip.length == 2) {
+          shipsUrl.add(new MarinetraficShip(newShip[0], newShip[1]));
+        }
+        else {
+          errors.add(ship);
+        }
+        System.out.printf("There was %d errors, when fetching ships from file", errors.size());
       }
-      else {
-          FileInputStream fstream = new FileInputStream("l575.htm");
-          DataInputStream fin = new DataInputStream(fstream);
-          in = new BufferedReader(new InputStreamReader(fin));
-      }
-      String ch;
-      String parsedData = "";
-      String regEx = "<td><span>";
-      String regStartLine = "<tr><td><span>";
 
-      while ((ch = in.readLine()) != null) {
-        if (ch.contains(regEx)) {
-
-          int indexEnd = ch.lastIndexOf("</span>");
-          int  indexStart = ch.indexOf("<span>") + 6;
-          if (ch.contains(regStartLine)) {
-            list.add(parsedData);
-
-            Date d = sdf.parse(ch.substring(indexStart, indexEnd));
-            Calendar c = Calendar.getInstance();
-            c.setTime(d);
-            long timestamp = c.getTimeInMillis();
-            parsedData = parsedData.valueOf(timestamp);
-
-          }
-          else {
-            parsedData = parsedData + ("," + ch.substring(indexStart, indexEnd));
-          }
-
+      //fetch data for each ship with html source
+      for (int i = 0; i < shipsHtml.size(); i++) {
+        shipsHtml.get(i).fetchData();
+        for (int j = 0; j < shipsHtml.get(i).list.size(); j++) {
+          System.out.println(shipsHtml.get(i).list.get(j));
         }
       }
-      System.out.printf("Fetched %d positions", list.size());
-      in.close();
+
+      //fetch data for each ship in url source
+      for (int i = 0; i < shipsUrl.size(); i++) {
+        shipsUrl.get(i).fetchData();
+        for (int j = 0; j < shipsUrl.get(i).list.size(); j++) {
+          System.out.println(shipsUrl.get(i).list.get(j));
+        }
+      }
 
     }
     catch (Exception e) {
       System.err.println("Error: " + e.getMessage());
     }
-    return list;
+
+
   }
 }

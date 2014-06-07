@@ -17,7 +17,7 @@ public class MarinetraficShip
   private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
   public ArrayList<String> list = new ArrayList<String>();
   private BufferedReader in;
-  private int sourceType;
+  public int sourceType;
   public String mmsi;
   public String name;
   private String file;
