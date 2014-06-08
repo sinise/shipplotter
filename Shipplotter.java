@@ -15,20 +15,15 @@ public class Shipplotter
     while (true)
     {
       String[] output = http.sendPost();
-      for (int i = 0; i < output.length; i++)
-      {
-        http.uploadToDb(output[i]);
-//      System.out.println(output[i]);
-      }
+      http.uploadToDb(output);
       Thread.sleep(15000L); //time i mm sec before each request
     }
   }
 
-  private void uploadToDb(String line) throws Exception
+  private void uploadToDb(String[] line) throws Exception
   {
-    Statement statement = null;
     PreparedStatement preparedStatement = null;
-    ResultSet resultSet = null;
+    Connection connection = null;
 
     try
       {
@@ -39,80 +34,66 @@ public class Shipplotter
         return;
       }
 
-      System.out.println("MySQL JDBC Driver Registered!");
-      Connection connection = null;
-      Statement stmt = null;
+    System.out.println("MySQL JDBC Driver Registered!");
 
-    //connect and upload data
     try {
       connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
-      statement = connection.createStatement();
-//      System.out.println("SQL Connection to database established!");
-      resultSet = statement.executeQuery("select * from shipplotter");
-//    writeResultSet(resultSet);
-      String[] la = line.split(",");
-//	System.out.printf("length is %d", la.length);
-//      for (int i = 0; i < la.length; i++)
-//      {
-//        System.out.println(la[i]);
-//      }
-      System.out.println(line);
-//      System.out.println(la[0]);
-//      System.out.println("this was mmsi");
-
-//      int mmsi = Integer.parseInt(la[0]);
-//      System.out.printf("this is the mmsi as in %d", mmsi);
-      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO shipplotter values (?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
-      preparedStatement.setString(1, la[0]);
-      preparedStatement.setString(2, la[1]);
-      preparedStatement.setString(3, la[2]);
-      preparedStatement.setString(4, la[3]);
-      preparedStatement.setString(5, la[4]);
-      preparedStatement.setString(6, la[5]);
-      preparedStatement.setString(7, la[6]);
-      preparedStatement.setString(8, la[7]);
-      preparedStatement.setString(9, la[8]);
-      preparedStatement.setString(10, la[9]);
-      preparedStatement.setString(11, la[10]);
-      preparedStatement.setString(12, la[11]);
-      preparedStatement.setString(13, la[12]);
-      preparedStatement.setString(14, la[13]);
-      preparedStatement.setString(15, la[14]);
-      preparedStatement.setString(16, la[15]);
-      preparedStatement.setString(17, la[16]);
-      preparedStatement.setString(18, la[17]);
-      preparedStatement.setString(19, la[18]);
-      preparedStatement.setString(20, la[19]);
-      preparedStatement.setString(21, la[20]);
-      preparedStatement.setString(22, la[21]);
-      preparedStatement.executeUpdate();
-
-    } catch (SQLException e) {
-      System.out.println("Connection Failed! Check output console");
-      System.out.println(e);
-      return;
-    } finally {
-      try 
+      for (int i = 0; i < line.length; i++)
       {
-        if(connection != null)
-          connection.close();
-          System.out.println("Connection closed !!");
-      } catch (SQLException e) {
-        e.printStackTrace();
-      }
-    }
-}
+	String[] la = line[i].split(",");
+	System.out.println(line[i]);
+	preparedStatement = connection.prepareStatement("INSERT IGNORE INTO shipplotter values (?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
+	preparedStatement.setString(1, la[0]);
+	preparedStatement.setString(2, la[1]);
+	preparedStatement.setString(3, la[2]);
+	preparedStatement.setString(4, la[3]);
+	preparedStatement.setString(5, la[4]);
+	preparedStatement.setString(6, la[5]);
+	preparedStatement.setString(7, la[6]);
+	preparedStatement.setString(8, la[7]);
+	preparedStatement.setString(9, la[8]);
+	preparedStatement.setString(10, la[9]);
+	preparedStatement.setString(11, la[10]);
+	preparedStatement.setString(12, la[11]);
+	preparedStatement.setString(13, la[12]);
+	preparedStatement.setString(14, la[13]);
+	preparedStatement.setString(15, la[14]);
+	preparedStatement.setString(16, la[15]);
+	preparedStatement.setString(17, la[16]);
+	preparedStatement.setString(18, la[17]);
+	preparedStatement.setString(19, la[18]);
+	preparedStatement.setString(20, la[19]);
+	preparedStatement.setString(21, la[20]);
+	preparedStatement.setString(22, la[21]);
+	preparedStatement.executeUpdate();
+     }
+	} catch (SQLException e) {
+	System.out.println("Connection Failed! Check output console");
+	System.out.println(e);
+	return;
+	} finally {
+            try 
+	    {
+        	if(connection != null)
+        	connection.close();
+        	System.out.println("Connection closed !!");
+	    }
+            catch (SQLException e) {
+        	e.printStackTrace();
+            }
+          }
+	System.out.println("");
 
+}
 
 // HTTP POST request
 public String[] sendPost() throws Exception {
   Date date = new Date();
-//  String filename = "shiplog.csv";
   String url = "http://www.coaa.co.uk/shipinfo.php";
   URL obj = new URL(url);
   HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-//  Writer out = new FileWriter(filename, true);
   ArrayList<String> thisout = new ArrayList<String>();
+
   //add reuqest header
   con.setRequestMethod("POST");
   con.setRequestProperty("User-Agent", USER_AGENT);
@@ -144,20 +125,13 @@ public String[] sendPost() throws Exception {
           ln.substring(135, 140) + "," + ln.substring(141, 142) + "," + ln.substring(143, 150) + "," + ln.substring(151,154) + "," + 
           ln.substring(155, 157) + "," + ln.substring(158, 159));
 
-//    out.write(ln);
     thisout.add(ln);
-    //String newInputLine = inputLine.replace("  ", "");
-//    System.out.print(ln);
   }
   in.close();
-//  out.flush();
-//  out.close();
 
   String[] returnArray = new String[thisout.size()];
   returnArray = thisout.toArray(returnArray);
   return returnArray;
-
-  //print result
 }
 
 }
