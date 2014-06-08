@@ -57,8 +57,8 @@ public class MarineTraficCrawler {
         for (int j = 0; j < shipsUrl.get(i).list.size(); j++) {
           System.out.println(shipsUrl.get(i).list.get(j));
         }
+        System.out.printf(" there was %d urlpositions from this ship", shipsUrl.get(i).list.size());
       }
-
     }
     catch (Exception e) {
       System.err.println("Error: " + e.getMessage());

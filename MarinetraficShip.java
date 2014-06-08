@@ -31,7 +31,7 @@ public class MarinetraficShip
         this.mmsi = mmsi;
         this.name = name;
         sourceType = 0;
-        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + name + "/per_page:5000/page:1";
+        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + name + "/_:ac7c0b36ce0c856915b1fe71cdff0fde/per_page:5000/page:1";
         url = new URL(urlString);
       }
       catch (Exception e) {
