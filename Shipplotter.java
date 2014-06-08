@@ -16,7 +16,8 @@ public class Shipplotter
     {
       String[] output = http.sendPost();
       http.uploadToDb(output);
-      Thread.sleep(15000L); //time i mm sec before each request
+
+      Thread.sleep(40000L); //time i mm sec before each request
     }
   }
 
