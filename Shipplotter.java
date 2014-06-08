@@ -126,6 +126,7 @@ public String[] sendPost() throws Exception {
           ln.substring(155, 157) + "," + ln.substring(158, 159));
 
     thisout.add(ln);
+    System.out.println(ln);
   }
   in.close();
 

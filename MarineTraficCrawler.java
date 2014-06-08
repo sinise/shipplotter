@@ -31,16 +31,16 @@ public class MarineTraficCrawler {
       // for either html or url source
       while ((ship = in.readLine()) != null) {
         String[] newShip = ship.split(",");
+        if (newShip.length == 4) {
+          shipsHtml.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3]));
+        }
         if (newShip.length == 3) {
-          shipsHtml.add(new MarinetraficShip(newShip[0], newShip[1], newShip[0]));
+          shipsUrl.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2]));
         }
-        if (newShip.length == 2) {
-          shipsUrl.add(new MarinetraficShip(newShip[0], newShip[1]));
-        }
-        else {
+        if (newShip.length != 3 && newShip.length != 4) {
           errors.add(ship);
         }
-        System.out.printf("There was %d errors, when fetching ships from file", errors.size());
+        System.out.printf("There was %d errors, when fetching ships from file and newShip.length is %d", errors.size(), newShip.length);
       }
 
       //fetch data for each ship with html source

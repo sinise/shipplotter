@@ -20,18 +20,21 @@ public class MarinetraficShip
   public int sourceType;
   public String mmsi;
   public String name;
+  public String type;
   private String file;
     /**
      *Constructor for a Marinetrafic ship to fetch from url
      *@param mmsi mmsi of ship
      *@param name name of ship entered exactly as marinetrafic does. is casesentitive
      */
-    public MarinetraficShip(String mmsi, String name) {
+    public MarinetraficShip(String mmsi, String name, String type) {
       try {
         this.mmsi = mmsi;
         this.name = name;
+        this.type = type;
         sourceType = 0;
-        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + name + "/_:ac7c0b36ce0c856915b1fe71cdff0fde/per_page:5000/page:1";
+        String htmlName = name.replace(" ", "%20"); 
+        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:5000/page:1";
         url = new URL(urlString);
       }
       catch (Exception e) {
@@ -45,24 +48,24 @@ public class MarinetraficShip
      *@param name name of ship entered exactly as marinetrafic does. is casesentitive
      *@param file file to fetch from
      */
-    public MarinetraficShip(String file, String mmsi, String name) {
+    public MarinetraficShip(String mmsi, String name, String type, String file) {
       this.mmsi = mmsi;
       this.name = name;
+      this.type = type;
       this.file = file;
       sourceType = 1;
     }
 
   public void fetchData() {
     try {
-
       if (sourceType == 0) {
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
         uc.connect();
         in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
       }
-
       if (sourceType == 1) {
+        System.out.printf("feching from file %s\n", name);
         FileInputStream fstream = new FileInputStream(file);
         DataInputStream fin = new DataInputStream(fstream);
         in = new BufferedReader(new InputStreamReader(fin));
