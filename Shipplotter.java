@@ -17,7 +17,7 @@ public class Shipplotter
       String[] output = http.sendPost();
       http.uploadToDb(output);
 
-      Thread.sleep(40000L); //time i mm sec before each request
+      Thread.sleep(50000L); //time i mm sec before each request
     }
   }
 
@@ -126,7 +126,6 @@ public String[] sendPost() throws Exception {
           ln.substring(155, 157) + "," + ln.substring(158, 159));
 
     thisout.add(ln);
-    System.out.println(ln);
   }
   in.close();
 

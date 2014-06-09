@@ -30,14 +30,14 @@ public class GenKMLPlaceMarker {
 	public float lng;
 	public String type;
 	public long timestamp;
-
 	public static void main(String[]args ){
+		int filePrefix = 0;
+
 		Statement stmt;
 		ResultSet rs;
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
 
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -55,7 +55,7 @@ public class GenKMLPlaceMarker {
 			doc.appendChild(root);
 			Element dnode = doc.createElement("Document");
 			root.appendChild(dnode);
-			
+
 			Element rstyle = doc.createElement("Style");
 			rstyle.setAttribute("id", "restaurantStyle");
 			Element ristyle = doc.createElement("IconStyle");
@@ -81,8 +81,10 @@ public class GenKMLPlaceMarker {
 			dnode.appendChild(bstyle);
 			
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE type=33 ORDER BY timestamp");
+			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi = 219853000 ORDER BY timestamp");
+			int count = 0;
 			while(rs.next()){
+				count++;
 				KML.timestamp = rs.getLong("timestamp");
 				KML.id = rs.getInt("mmsi");
 				KML.name = rs.getString("name");
@@ -108,23 +110,63 @@ public class GenKMLPlaceMarker {
 				styleUrl.appendChild(doc.createTextNode( "#" + KML.type+ "Style"));
 				placemark.appendChild(styleUrl);
 
-
 				Element TimeStamp = doc.createElement("TimeStamp");
 				Element when = doc.createElement("when");
 				when.appendChild(doc.createTextNode(formatedTime + ""));
 				TimeStamp.appendChild(when);
 				placemark.appendChild(TimeStamp);
 
-
 				Element point = doc.createElement("Point");
 				Element coordinates = doc.createElement("coordinates");
 				coordinates.appendChild(doc.createTextNode(KML.lng+ "," + KML.lat));
 				point.appendChild(coordinates);
 				placemark.appendChild(point);
+				if(count % 10000 == 0) {
+					System.out.printf("lines %d\n", count);
+					filePrefix++;
+					Source src = new DOMSource(doc);
+					Result dest = new StreamResult(new File(filePrefix + "pm.kml"));
+					aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
+					aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+					aTransformer.transform(src, dest);
 
+			doc = builder.newDocument();
+			root = doc.createElement("kml");
+			root.setAttribute("xmlns", "http://earth.google.com/kml/2.1");
+			doc.appendChild(root);
+			dnode = doc.createElement("Document");
+			root.appendChild(dnode);
+
+			rstyle = doc.createElement("Style");
+			rstyle.setAttribute("id", "restaurantStyle");
+			ristyle = doc.createElement("IconStyle");
+			ristyle.setAttribute("id", "restaurantIcon");
+			ricon = doc.createElement("Icon");
+			riconhref = doc.createElement("href");
+			riconhref.appendChild(doc.createTextNode("http://maps.google.com/mapfiles/kml/pal2/icon63.png"));
+			rstyle.appendChild(ristyle);
+			ricon.appendChild(riconhref);
+			ristyle.appendChild(ricon);
+			dnode.appendChild(rstyle);
+			bstyle = doc.createElement("Style");
+			bstyle.setAttribute("id", "barStyle");
+
+			bistyle = doc.createElement("IconStyle");
+			bistyle.setAttribute("id", "barIcon");
+			bicon = doc.createElement("Icon");
+			biconhref = doc.createElement("href");
+			biconhref.appendChild(doc.createTextNode("http://maps.google.com/mapfiles/kml/pal2/icon27.png"));
+			bstyle.appendChild(bistyle);
+			bicon.appendChild(biconhref);
+			bistyle.appendChild(bicon);
+			dnode.appendChild(bstyle);
+
+				}
 			}
+
 			Source src = new DOMSource(doc);
-			Result dest = new StreamResult(new File("PlaceMarkers.kml")); 
+			filePrefix++;
+			Result dest = new StreamResult(new File( filePrefix + "pm.kml")); 
 			aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			aTransformer.transform(src, dest);
