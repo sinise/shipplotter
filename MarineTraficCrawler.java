@@ -26,7 +26,7 @@ public class MarineTraficCrawler {
       FileInputStream fstream = new FileInputStream(args[0]);
       DataInputStream fin = new DataInputStream(fstream);
       BufferedReader in = new BufferedReader(new InputStreamReader(fin));
-
+      UploadToDB DB = new UploadToDB();
       //For each ship create a MarinetraficShip object and place it in the apporpriate array list 
       // for either html or url source
       while ((ship = in.readLine()) != null) {
@@ -46,20 +46,19 @@ public class MarineTraficCrawler {
       //fetch data for each ship with html source
       for (int i = 0; i < shipsHtml.size(); i++) {
         shipsHtml.get(i).fetchData();
-        for (int j = 0; j < shipsHtml.get(i).list.size(); j++) {
-          uploadToDB.upload(shipsHtml.get(i).list.get(j));
+//        for (int j = 0; j < shipsHtml.get(i).listOut.length(); j++) {
+          DB.upload(shipsHtml.get(i).getData());
 //          System.out.println(shipsHtml.get(i).list.get(j));
-        }
+//        }
       }
 
       //fetch data for each ship in url source
       for (int i = 0; i < shipsUrl.size(); i++) {
         shipsUrl.get(i).fetchData();
-        for (int j = 0; j < shipsUrl.get(i).list.size(); j++) {
-          uploadToDB.upload(shipsUrl.get(i).list.get(j));
+//        for (int j = 0; j < shipsUrl.get(i).listOut.length(); j++) {
+        DB.upload(shipsUrl.get(i).getData());
 //System.out.println(shipsUrl.get(i).list.get(j));
-        }
-        System.out.printf(" there was %d urlpositions from this ship", shipsUrl.get(i).list.size());
+//        }
       }
     }
     catch (Exception e) {

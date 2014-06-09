@@ -15,7 +15,7 @@ public class MarinetraficShip
   private URLConnection uc;
   private String urlstring;
   private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-  public ArrayList<String> list = new ArrayList<String>();
+  private ArrayList<String> list = new ArrayList<String>();
   private BufferedReader in;
   public int sourceType;
   public String mmsi;
@@ -56,6 +56,14 @@ public class MarinetraficShip
       sourceType = 1;
     }
 
+  public String[] getData() {
+    int length = list.size();
+    String[] returnArray = new String[length];
+    for (int i = 0; i < length; i++) {
+      returnArray[i] = list.get(i);
+    }
+    return returnArray;
+}
   public void fetchData() {
     try {
       if (sourceType == 0) {
