@@ -79,7 +79,16 @@ public class MarinetraficShip
           int indexEnd = ch.lastIndexOf("</span>");
           int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
-            list.add(parsedData);
+            if (!parsedData.equals("")){
+              String[] lineSplit = parsedData.split(",");
+              String time = lineSplit[0];
+              String speed = lineSplit[1];
+              String lat = lineSplit[2];
+              String lon = lineSplit[3];
+              String course = lineSplit[4];
+              list.add(mmsi + "," + time.substring(0, 10) + ",0," + type +"," + lat + "," + lon + "," + speed + "," + course + ",0,0,0,0," +
+                       name + ",0,0,0,0,0,0,0,0,0");
+            }
             Date d = sdf.parse(ch.substring(indexStart, indexEnd));
             Calendar c = Calendar.getInstance();
             c.setTime(d);
