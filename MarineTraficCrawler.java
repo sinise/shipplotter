@@ -47,7 +47,8 @@ public class MarineTraficCrawler {
       for (int i = 0; i < shipsHtml.size(); i++) {
         shipsHtml.get(i).fetchData();
         for (int j = 0; j < shipsHtml.get(i).list.size(); j++) {
-          System.out.println(shipsHtml.get(i).list.get(j));
+          uploadToDB.upload(shipsHtml.get(i).list.get(j));
+//          System.out.println(shipsHtml.get(i).list.get(j));
         }
       }
 
@@ -55,7 +56,8 @@ public class MarineTraficCrawler {
       for (int i = 0; i < shipsUrl.size(); i++) {
         shipsUrl.get(i).fetchData();
         for (int j = 0; j < shipsUrl.get(i).list.size(); j++) {
-          System.out.println(shipsUrl.get(i).list.get(j));
+          uploadToDB.upload(shipsUrl.get(i).list.get(j));
+//System.out.println(shipsUrl.get(i).list.get(j));
         }
         System.out.printf(" there was %d urlpositions from this ship", shipsUrl.get(i).list.size());
       }
