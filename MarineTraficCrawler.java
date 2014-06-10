@@ -1,3 +1,4 @@
+
 import java.net.*;
 import java.io.*;
 import java.awt.Toolkit;
@@ -40,25 +41,21 @@ public class MarineTraficCrawler {
         if (newShip.length != 3 && newShip.length != 4) {
           errors.add(ship);
         }
-        System.out.printf("There was %d errors, when fetching ships from file and newShip.length is %d", errors.size(), newShip.length);
+        System.out.printf("There was %d errors, when fetching ship ½s from file", errors.size(), newShip[1]);
+        System.out.printf("  Url ships = %d      htmlShips = %d\n", shipsUrl.size(), shipsHtml.size());
+
       }
 
       //fetch data for each ship with html source
       for (int i = 0; i < shipsHtml.size(); i++) {
         shipsHtml.get(i).fetchData();
-//        for (int j = 0; j < shipsHtml.get(i).listOut.length(); j++) {
           DB.upload(shipsHtml.get(i).getData());
-//          System.out.println(shipsHtml.get(i).list.get(j));
-//        }
       }
 
       //fetch data for each ship in url source
       for (int i = 0; i < shipsUrl.size(); i++) {
         shipsUrl.get(i).fetchData();
-//        for (int j = 0; j < shipsUrl.get(i).listOut.length(); j++) {
         DB.upload(shipsUrl.get(i).getData());
-//System.out.println(shipsUrl.get(i).list.get(j));
-//        }
       }
     }
     catch (Exception e) {

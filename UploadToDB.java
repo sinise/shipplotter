@@ -18,13 +18,16 @@ public class UploadToDB
       }
 
     System.out.println("MySQL JDBC Driver Registered!");
-
+    int count = 0;
     try {
       connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
       for (int i = 0; i < line.length; i++)
       {
 	      String[] la = line[i].split(",");
-	      System.out.println(line[i]);
+              count++;
+	      if ((count % 1000) == 0) {
+                System.out.println(line[i]);
+              }
 	      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO shipplotter values (?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
 	      preparedStatement.setString(1, la[0]);
 	      preparedStatement.setString(2, la[1]);
