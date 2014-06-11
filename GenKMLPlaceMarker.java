@@ -81,7 +81,7 @@ public class GenKMLPlaceMarker {
 			dnode.appendChild(bstyle);
 			
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi = 219853000 ORDER BY timestamp");
+			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi = 219001819 ORDER BY timestamp");
 			int count = 0;
 			while(rs.next()){
 				count++;
