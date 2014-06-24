@@ -87,7 +87,7 @@ public class MarinetraficShip
           int indexEnd = ch.lastIndexOf("</span>");
           int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
-            if (!parsedData.equals("")){
+            if (parsedData.length() > 20){
               String[] lineSplit = parsedData.split(",");
               String time = lineSplit[0];
               String speed = lineSplit[1];
@@ -97,6 +97,7 @@ public class MarinetraficShip
               list.add(mmsi + "," + time.substring(0, 10) + ",0," + type +"," + lat + "," + lon + "," + speed + "," + course + ",0,0,0,0," +
                        name + ",0,0,0,0,0,0,0,0,0");
             }
+
             Date d = sdf.parse(ch.substring(indexStart, indexEnd));
             Calendar c = Calendar.getInstance();
             c.setTime(d);
@@ -108,6 +109,7 @@ public class MarinetraficShip
           }
         }
       }
+      System.out.println(name);
       System.out.printf("Fetched %d positions", list.size());
       in.close();
     }

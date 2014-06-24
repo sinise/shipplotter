@@ -26,7 +26,7 @@ public class UploadkvoterToDB
 	      String[] la = line[i].split("_");
               count++;
                 System.out.println(line[i]);
-	      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO kvoter values (?, ?, ?, ? , ?, ?, ?)");
+	      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO northsea values (?, ?, ?, ? , ?, ?, ?)");
 	      preparedStatement.setString(1, la[0]);
 	      preparedStatement.setString(2, la[1]);
 	      preparedStatement.setString(3, la[2]);

@@ -57,8 +57,8 @@ public class Kvoter
               String sName = regName[1];
               String pulje = lineSplit[1].trim();
               String andel = lineSplit[2].trim();
-              String yearM = lineSplit[3].trim();
-              String regM = lineSplit[4].trim();
+              String yearM = lineSplit[3].trim().replace(".","");
+              String regM = lineSplit[4].trim().replace(".","");
               String area = this.area;
               list.add(reg + "_" + sName + "_" + pulje + "_" + andel + "_" + yearM + "_" + regM + "_" + area);
               parsedData = ch.substring(indexStart, indexEnd);

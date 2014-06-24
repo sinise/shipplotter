@@ -38,7 +38,7 @@ public class MarineTraficCrawler {
         if (newShip.length == 3) {
           shipsUrl.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2]));
         }
-        if (newShip.length != 3 && newShip.length != 4) {
+        if (newShip.length != 3 || newShip.length != 4) {
           errors.add(ship);
         }
         System.out.printf("There was %d errors, when fetching ship ½s from file", errors.size(), newShip[1]);
