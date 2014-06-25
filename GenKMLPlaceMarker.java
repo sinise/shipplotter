@@ -30,24 +30,31 @@ public class GenKMLPlaceMarker {
 	public float lng;
 	public String type;
 	public long timestamp;
-	public static void main(String[]args ){
+
+	public static void main(String[] args){
 		int filePrefix = 0;
 
-		Statement stmt;
-		ResultSet rs;
+    if (args.length != 1)
+    {
+      System.out.println("Commandline argument must be a sql string in kvotes");
+      return;
+    }
+    String sql = args[0];
+//		Statement stmt;
+//		ResultSet rs;
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
-
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-
+    DB DB = new DB();
+    DB.UpdateSQL(sql);
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://localhost/shipplotter";
-			Connection con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
+//			Class.forName("com.mysql.jdbc.Driver");
+//			String url = "jdbc:mysql://localhost/shipplotter";
+//			Connection con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			TransformerFactory tranFactory = TransformerFactory.newInstance(); 
-		        Transformer aTransformer = tranFactory.newTransformer(); 
+	    Transformer aTransformer = tranFactory.newTransformer(); 
 
 			Document doc = builder.newDocument();
 			Element root = doc.createElement("kml");
@@ -67,7 +74,7 @@ public class GenKMLPlaceMarker {
 			ricon.appendChild(riconhref);
 			ristyle.appendChild(ricon);
 			dnode.appendChild(rstyle);
-			
+
 			Element bstyle = doc.createElement("Style");
 			bstyle.setAttribute("id", "barStyle");
 			Element bistyle = doc.createElement("IconStyle");
@@ -79,19 +86,19 @@ public class GenKMLPlaceMarker {
 			bicon.appendChild(biconhref);
 			bistyle.appendChild(bicon);
 			dnode.appendChild(bstyle);
-			
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi = 219001819 ORDER BY timestamp");
+
+//			stmt = con.createStatement();
+//			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi = 219001819 ORDER BY timestamp");
 			int count = 0;
-			while(rs.next()){
+			while(DB.rs.next()){
 				count++;
-				KML.timestamp = rs.getLong("timestamp");
-				KML.id = rs.getInt("mmsi");
-				KML.name = rs.getString("name");
-				KML.dest = rs.getString("dest");
-				KML.lat = rs.getFloat("lat");
-				KML.lng = rs.getFloat("lon");
-				KML.type = rs.getString("type");
+				KML.timestamp = DB.rs.getLong("timestamp");
+				KML.id = DB.rs.getInt("mmsi");
+				KML.name = DB.rs.getString("name");
+				KML.dest = DB.rs.getString("dest");
+				KML.lat = DB.rs.getFloat("lat");
+				KML.lng = DB.rs.getFloat("lon");
+				KML.type = DB.rs.getString("type");
 
 				String formatedTime = format.format(KML.timestamp * 1000);
 

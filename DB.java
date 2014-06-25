@@ -14,10 +14,10 @@ public class DB
   }
 
   /**
-   * Return values from DB
+   * Update DB this DB object with sql statement
    * @param sql the sql statement. Must start with SELECT
    */
-  public void get(String sql)
+  public void UpdateSQL(String sql)
   {
     try
       {
@@ -32,6 +32,8 @@ public class DB
     System.out.println("MySQL JDBC Driver Registered!");
 
     try{
+      this.stmt = con.createStatement();
+      this.rs = stmt.executeQuery(sql);
 
     }
     catch (Exception e){
@@ -50,11 +52,6 @@ public class DB
     System.out.println("");
 
   }
-
-
-
-
-
 
   public void upload(String[] line) throws Exception
   {
