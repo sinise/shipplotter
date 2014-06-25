@@ -1,6 +1,7 @@
 #!/bin/bash
 while (true)
 do
-	sleep 10
 	java Shipplotter
+	sleep 10
+
 done
