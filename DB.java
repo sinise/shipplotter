@@ -31,10 +31,13 @@ public class DB
     System.out.println("MySQL JDBC Driver Registered!");
 
     try{
+      System.out.printf("trying sql statement %s \n", sql);
+ 
       this.stmt = con.createStatement();
       this.rs = stmt.executeQuery(sql);
     }
     catch (Exception e){
+      System.out.println("failed to execute statement");
 
     }
   }
