@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.sql.*;
 public class DB
 {
-  public Statement stmt;
+//  public Statement stmt;
   public ResultSet rs;
   Connection con;
 
@@ -17,12 +17,16 @@ public class DB
    * Update DB this DB object with sql statement
    * @param sql the sql statement. Must start with SELECT
    */
-  public void UpdateSQL(String sql)
+  public void UpdateSQL(String sql, String mmsi)
   {
+    PreparedStatement preparedStatement = null;
+    rs = null;
+    Connection con = null;
+
     try {
         Class.forName("com.mysql.jdbc.Driver");
         String url = "jdbc:mysql://localhost/shipplotter";
-        Connection con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
+        con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
     }
     catch (Exception e) {
       System.out.println("Connection Failed! Check output console");
@@ -32,13 +36,16 @@ public class DB
 
     try{
       System.out.printf("trying sql statement %s \n", sql);
- 
-      this.stmt = con.createStatement();
-      this.rs = stmt.executeQuery(sql);
+      String selectSql = sql;
+      preparedStatement = con.prepareStatement(selectSql);
+      preparedStatement.setString(1, mmsi);
+
+//      preparedStatement.setInt(0, 1001);
+      rs = preparedStatement.executeQuery();
     }
     catch (Exception e){
       System.out.println("failed to execute statement");
-
+      System.err.println(e.getMessage());
     }
   }
 

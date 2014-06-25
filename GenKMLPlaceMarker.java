@@ -34,18 +34,19 @@ public class GenKMLPlaceMarker {
 	public static void main(String[] args){
 		int filePrefix = 0;
 
-    if (args.length != 1)
+    if (args.length != 2)
     {
-      System.out.println("Commandline argument must be a sql string in kvotes");
+      System.out.println("Commandline argument must be a sql string in kvotes followed by mmsi");
       return;
     }
     String sql = args[0];
+    String mmsi = args[1];
 //		Statement stmt;
 //		ResultSet rs;
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     DB DB = new DB();
-    DB.UpdateSQL(sql);
+    DB.UpdateSQL(sql, mmsi);
 		try {
 //			Class.forName("com.mysql.jdbc.Driver");
 //			String url = "jdbc:mysql://localhost/shipplotter";
