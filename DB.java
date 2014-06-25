@@ -15,9 +15,10 @@ public class DB
 
   /**
    * Update DB this DB object with sql statement
-   * @param sql the sql statement. Must start with SELECT
+   * @param sql the sql statement as prepared statement whit 1 ?. Must start with SELECT
+   * @param value the value of ?
    */
-  public void UpdateSQL(String sql, String mmsi)
+  public void UpdateSQL(String sql, String value)
   {
     PreparedStatement preparedStatement = null;
     rs = null;
@@ -38,7 +39,7 @@ public class DB
       System.out.printf("trying sql statement %s \n", sql);
       String selectSql = sql;
       preparedStatement = con.prepareStatement(selectSql);
-      preparedStatement.setString(1, mmsi);
+      preparedStatement.setString(1, value);
 
 //      preparedStatement.setInt(0, 1001);
       rs = preparedStatement.executeQuery();
