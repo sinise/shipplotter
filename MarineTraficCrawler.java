@@ -27,7 +27,7 @@ public class MarineTraficCrawler {
       FileInputStream fstream = new FileInputStream(args[0]);
       DataInputStream fin = new DataInputStream(fstream);
       BufferedReader in = new BufferedReader(new InputStreamReader(fin));
-      UploadToDB DB = new UploadToDB();
+      DB DB = new DB();
       //For each ship create a MarinetraficShip object and place it in the apporpriate array list 
       // for either html or url source
       while ((ship = in.readLine()) != null) {
