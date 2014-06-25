@@ -19,28 +19,28 @@ public class DB
    */
   public void UpdateSQL(String sql)
   {
-    try
-      {
+    try {
         Class.forName("com.mysql.jdbc.Driver");
         String url = "jdbc:mysql://localhost/shipplotter";
         Connection con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
-      }
-      catch (Exception e) {
-        System.out.println("Connection Failed! Check output console");
-        return;
-      }
+    }
+    catch (Exception e) {
+      System.out.println("Connection Failed! Check output console");
+      return;
+    }
     System.out.println("MySQL JDBC Driver Registered!");
 
     try{
       this.stmt = con.createStatement();
       this.rs = stmt.executeQuery(sql);
-
     }
     catch (Exception e){
 
     }
-    finally {
-      try {
+  }
+
+  public void close() {
+    try {
         if(con != null)
         con.close();
         System.out.println("Connection closed !!");
@@ -48,7 +48,6 @@ public class DB
       catch (SQLException e) {
         e.printStackTrace();
       }
-    }
     System.out.println("");
 
   }

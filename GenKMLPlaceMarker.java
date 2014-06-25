@@ -181,5 +181,6 @@ public class GenKMLPlaceMarker {
 		} catch (Exception e){
 			System.out.println(e.getMessage());
 		}
+    DB.close();
 	}
 }
