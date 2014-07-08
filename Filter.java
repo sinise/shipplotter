@@ -7,25 +7,12 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.OutputKeys;
-
-//import com.google.marker;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.util.ArrayList;
 
 public class Filter {
 	public ResultSet rs;
 	public long timestamp;
-
+  public ArrayList<> listStartTime= new ArrayList<int>();
   /**
   * Update filter reultset rs object with sql statement and filtered values
   */
@@ -35,21 +22,17 @@ public class Filter {
     rs = DB.rs;
     DB.close();
   }
-/*			while(DB.rs.next()){
-				count++;
-				KML.timestamp = DB.rs.getLong("timestamp");
-				KML.id = DB.rs.getInt("mmsi");
-				KML.name = DB.rs.getString("name");
-				KML.dest = DB.rs.getString("dest");
-				KML.lat = DB.rs.getFloat("lat");
-				KML.lng = DB.rs.getFloat("lon");
-				KML.type = DB.rs.getString("type");
 
-				String formatedTime = format.format(KML.timestamp * 1000);
-
-		} catch (Exception e){
-			System.out.println(e.getMessage());
-		}
-*/
-
+  public void filter(ResultSet rawRs) {
+    int lastTime = -1;
+    while(rawRs.next()){
+  		if (lastTime == -1) {
+        lastTime = rawRs.getInt("timestamp");
+      }
+      if ((lastTime - rawRs.getInt("timestamp")) > 100000) {
+        listStartTime.add(lastTime);
+        lastTime = rawRs.getInt("timestamp");
+      }
+    }
+  }
 }
