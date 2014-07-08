@@ -22,7 +22,7 @@ public class Filter {
 
       DB.UpdateSQL(sql, mmsi, mmsi, mmsi);
           System.out.println("2 filter");
-
+      int count = 0;
       int lastTime = -1;
       while(DB.rs.next()){
   		  if (lastTime == -1) {
@@ -33,21 +33,17 @@ public class Filter {
           System.out.println("3 filter");
 
         }
-          int diff = lastTime - DB.rs.getInt("timestamp");
-          System.out.println("diff is" + lastTime);
+          int diff = DB.rs.getInt("timestamp") - lastTime;
 
-        if (diff > 1) {
+        if (diff > 3000) {
           DB thisDB = new DB();
-          System.out.println("4 filter");
-
-          thisDB.UpdateSQL("SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi= ? ORDER BY timestamp", mmsi, mmsi, mmsi);
-          System.out.println("5 filter");
-
-//                            mmsi, Long.toString(lastTime - 10000), "" + (lastTime + 1000000));
+          thisDB.UpdateSQL("SELECT * FROM shipplotter WHERE mmsi = ? and timestamp > ? and timestamp < ? ORDER BY timestamp",
+                            mmsi, Long.toString(lastTime - 18000), "" + (lastTime + 86000));
           results.add(thisDB.rs);
-          System.out.printf("added one resultset. resultets = %D", results.size());
-          lastTime = DB.rs.getInt("timestamp");
+          System.out.printf("added one resultset. resultets = %d\n", results.size());
         }
+          lastTime = DB.rs.getInt("timestamp");
+
       }
     } catch (Exception e){
       System.out.println(e.getMessage());

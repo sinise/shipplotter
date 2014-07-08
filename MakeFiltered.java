@@ -28,7 +28,7 @@ public class MakeFiltered {
     Filter myFilter = new Filter(sql, mmsi);
 
     for(int i = 0; i < myFilter.results.size(); i++) {
-      String filname = filePrefix + "-" + mmsi;
+      String filname = "-" + filePrefix + "-" + mmsi;
       GenKml.makeKml(myFilter.results.get(i), filname);
       filePrefix++;
     }
