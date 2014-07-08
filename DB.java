@@ -18,7 +18,7 @@ public class DB
    * @param sql the sql statement as prepared statement whit 1 ?. Must start with SELECT
    * @param value the value of ?
    */
-  public void UpdateSQL(String sql, String value)
+  public void UpdateSQL(String sql, String value1, String value2, String value3)
   {
     PreparedStatement preparedStatement = null;
     rs = null;
@@ -37,9 +37,11 @@ public class DB
 
     try{
       System.out.printf("trying sql statement %s \n", sql);
-      String selectSql = sql;
+       String selectSql = sql;
       preparedStatement = con.prepareStatement(selectSql);
-      preparedStatement.setString(1, value);
+      preparedStatement.setString(1, value1);
+      preparedStatement.setString(2, value2);
+      preparedStatement.setString(3, value3);
 
 //      preparedStatement.setInt(0, 1001);
       rs = preparedStatement.executeQuery();

@@ -22,7 +22,7 @@ import javax.xml.transform.OutputKeys;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class GenKMLPlaceMarker {
+public class GenKml {
 	public int id;
 	public String name;
 	public String dest;
@@ -31,26 +31,14 @@ public class GenKMLPlaceMarker {
 	public String type;
 	public long timestamp;
 
-	public static void main(String[] args){
-		int filePrefix = 0;
+	public static void makeKml(ResultSet rs, String filname){
+    int filePrefix = 0;
+//    ResultSet rs = args[0];
+//    String filname = args[1];
 
-    if (args.length != 2)
-    {
-      System.out.println("Commandline argument must be a sql string in kvotes followed by mmsi");
-      return;
-    }
-    String sql = args[0];
-    String mmsi = args[1];
-//		Statement stmt;
-//		ResultSet rs;
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-    DB DB = new DB();
-    DB.UpdateSQL(sql, mmsi);
 		try {
-//			Class.forName("com.mysql.jdbc.Driver");
-//			String url = "jdbc:mysql://localhost/shipplotter";
-//			Connection con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -88,18 +76,16 @@ public class GenKMLPlaceMarker {
 			bistyle.appendChild(bicon);
 			dnode.appendChild(bstyle);
 
-//			stmt = con.createStatement();
-//			rs = stmt.executeQuery("SELECT * FROM shipplotter WHERE mmsi = 219001819 ORDER BY timestamp");
 			int count = 0;
-			while(DB.rs.next()){
+			while(rs.next()){
 				count++;
-				KML.timestamp = DB.rs.getLong("timestamp");
-				KML.id = DB.rs.getInt("mmsi");
-				KML.name = DB.rs.getString("name");
-				KML.dest = DB.rs.getString("dest");
-				KML.lat = DB.rs.getFloat("lat");
-				KML.lng = DB.rs.getFloat("lon");
-				KML.type = DB.rs.getString("type");
+				KML.timestamp = rs.getLong("timestamp");
+				KML.id = rs.getInt("mmsi");
+				KML.name = rs.getString("name");
+				KML.dest = rs.getString("dest");
+				KML.lat = rs.getFloat("lat");
+				KML.lng = rs.getFloat("lon");
+				KML.type = rs.getString("type");
 
 				String formatedTime = format.format(KML.timestamp * 1000);
 
@@ -174,7 +160,7 @@ public class GenKMLPlaceMarker {
 
 			Source src = new DOMSource(doc);
 			filePrefix++;
-			Result dest = new StreamResult(new File( filePrefix + "pm.kml")); 
+			Result dest = new StreamResult(new File( filePrefix + filname + ".kml")); 
 			aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			aTransformer.transform(src, dest);
@@ -182,6 +168,5 @@ public class GenKMLPlaceMarker {
 		} catch (Exception e){
 			System.out.println(e.getMessage());
 		}
-    DB.close();
 	}
 }

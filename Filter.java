@@ -8,31 +8,50 @@ import java.sql.Statement;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.lang.String;
 public class Filter {
-	public ResultSet rs;
 	public long timestamp;
-  public ArrayList<> listStartTime= new ArrayList<int>();
+  public ArrayList<ResultSet> results = new ArrayList<ResultSet>();
   /**
   * Update filter reultset rs object with sql statement and filtered values
   */
-	public void UpdateSQL(String sql, String mmsi) {
-    DB DB = new DB();
-    DB.UpdateSQL(sql, mmsi);
-    rs = DB.rs;
-    DB.close();
-  }
+	public Filter(String sql, String mmsi) {
+    try {
+      DB DB = new DB();
+          System.out.println("1 filter");
 
-  public void filter(ResultSet rawRs) {
-    int lastTime = -1;
-    while(rawRs.next()){
-  		if (lastTime == -1) {
-        lastTime = rawRs.getInt("timestamp");
+      DB.UpdateSQL(sql, mmsi, mmsi, mmsi);
+          System.out.println("2 filter");
+
+      int lastTime = -1;
+      while(DB.rs.next()){
+  		  if (lastTime == -1) {
+          lastTime = DB.rs.getInt("timestamp");
+          System.out.printf("2,5 filter, " + lastTime);
+          System.out.println("");
+
+          System.out.println("3 filter");
+
+        }
+          int diff = lastTime - DB.rs.getInt("timestamp");
+          System.out.println("diff is" + lastTime);
+
+        if (diff > 1) {
+          DB thisDB = new DB();
+          System.out.println("4 filter");
+
+          thisDB.UpdateSQL("SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi= ? ORDER BY timestamp", mmsi, mmsi, mmsi);
+          System.out.println("5 filter");
+
+//                            mmsi, Long.toString(lastTime - 10000), "" + (lastTime + 1000000));
+          results.add(thisDB.rs);
+          System.out.printf("added one resultset. resultets = %D", results.size());
+          lastTime = DB.rs.getInt("timestamp");
+        }
       }
-      if ((lastTime - rawRs.getInt("timestamp")) > 100000) {
-        listStartTime.add(lastTime);
-        lastTime = rawRs.getInt("timestamp");
+    } catch (Exception e){
+      System.out.println(e.getMessage());
       }
-    }
+
   }
 }
