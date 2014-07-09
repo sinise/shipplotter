@@ -31,6 +31,8 @@ public class MakeKmlsFromFileList {
         DB.UpdateSQL(sql, mmsi, mmsi, mmsi);
         GenKml.makeKml(DB.rs, name);
       }
-    }
-	}
+    } catch (Exception e) {
+        System.out.println(e);
+      }
+ ]
 }
