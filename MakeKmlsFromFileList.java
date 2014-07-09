@@ -19,6 +19,7 @@ public class MakeKmlsFromFileList {
     try {
       String file = args[0];
       String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi = ? ORDER BY timestamp";
+      String ship;
       FileInputStream fstream = new FileInputStream(file);
       DataInputStream fin = new DataInputStream(fstream);
       BufferedReader in = new BufferedReader(new InputStreamReader(fin));
@@ -34,5 +35,5 @@ public class MakeKmlsFromFileList {
     } catch (Exception e) {
         System.out.println(e);
       }
- ]
+ }
 }
