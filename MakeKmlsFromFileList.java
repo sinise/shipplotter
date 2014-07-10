@@ -18,8 +18,9 @@ public class MakeKmlsFromFileList {
 
     try {
       String file = args[0];
-      String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi = ? ORDER BY timestamp";
+      String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and timestamp < ? ORDER BY timestamp";
       String ship;
+      String timestamp = "1404086760";
       FileInputStream fstream = new FileInputStream(file);
       DataInputStream fin = new DataInputStream(fstream);
       BufferedReader in = new BufferedReader(new InputStreamReader(fin));
@@ -29,7 +30,7 @@ public class MakeKmlsFromFileList {
         String[] newShip = ship.split(",");
         String mmsi = newShip[0];
         String name = newShip[1];
-        DB.UpdateSQL(sql, mmsi, mmsi, mmsi);
+        DB.UpdateSQL(sql, mmsi, mmsi, timestamp);
         GenKml.makeKml(DB.rs, name);
       }
     } catch (Exception e) {
