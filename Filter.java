@@ -21,10 +21,7 @@ public class Filter {
 	public Filter(String sql, String mmsi, String timestamp) {
     try {
       DB DB = new DB();
-      System.out.println("1 filter");
       DB.UpdateSQL(sql, mmsi, mmsi, timestamp);
-
-      System.out.println("2 filter");
       int count = 0;
       int lastTime = -1;
       while(DB.rs.next()){
@@ -33,12 +30,14 @@ public class Filter {
         }
 
         int diff = DB.rs.getInt("timestamp") - lastTime;
-        if (diff > 3000 && validPosition(DB.rs.getFloat("lat"), DB.rs.getFloat("lon"))) {
-          DB thisDB = new DB();
-          thisDB.UpdateSQL("SELECT * FROM shipplotter WHERE mmsi = ? and timestamp > ? and timestamp < ? ORDER BY timestamp",
-                            mmsi, Long.toString(lastTime - 18000), "" + (lastTime + 86000));
-          results.add(thisDB.rs);
-          System.out.printf("added one resultset. resultets = %d\n", results.size());
+        if (diff > 3000) {
+          if (validPosition(DB.rs.getFloat("lat"), DB.rs.getFloat("lon"))) {
+            DB thisDB = new DB();
+            thisDB.UpdateSQL("SELECT * FROM shipplotter WHERE mmsi = ? and timestamp > ? and timestamp < ? ORDER BY timestamp",
+                              mmsi, Long.toString(lastTime - 18000), "" + (lastTime + 86000));
+            results.add(thisDB.rs);
+            System.out.printf("added one resultset. resultets = %d\n", results.size());
+          }
         }
         lastTime = DB.rs.getInt("timestamp");
       }
@@ -49,13 +48,17 @@ public class Filter {
   }
   public boolean validPosition(float lat, float lon) {
     //check if position is valid for area kategat
-    if(lat > sss && lat < nnn && lon < eee & lon > www) {
+    if(lat > 55.71 && lat < 56.09 && lon < 12.68 & lon > 12.51) {
       return true;
     }
     //Check if position is valid for area Køge bugt
-    if(lat > sss && lat < nnn && lon < eee & lon > www) {
+    if(lat > 55.4 && lat < 55.54 && lon < 12.69 & lon > 12.21) {
       return true;
     }
+    else {
+      System.out.println("Position outside area, skiping this file");
+
+      return false;}
 
   }
 }

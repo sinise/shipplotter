@@ -19,7 +19,7 @@ public class MakeFiltered {
 
   public static void main(String[] args){
     if (args.length != 1) {
-      System.out.println("Commandline argument must be a mmsi");
+      System.out.println("Commandline argument must be a file");
       return;
     }
     try {
@@ -34,16 +34,25 @@ public class MakeFiltered {
 
       //For each ship create kmlfiles
     while ((ship = in.readLine()) != null) {
-      System.in.read();
+      System.out.println("start whileloop");
+
+//      System.in.read();
       int filePrefix = 0;
       String[] newShip = ship.split(",");
       String mmsi = newShip[0];
       String name = newShip[1];
       Filter myFilter = new Filter(sql, mmsi, timestamp);
+      System.out.println("createt filter");
+
       for(int i = 0; i < myFilter.results.size(); i++) {
+      System.out.println("start forloop");
+
         String filname = "-" + filePrefix + "-" + mmsi;
         GenKml.makeKml(myFilter.results.get(i), filname);
+      System.out.println("in for loop after GenKml");
+
         filePrefix++;
+
       }
     }
     } catch (Exception e) {
