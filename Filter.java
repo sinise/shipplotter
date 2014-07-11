@@ -15,26 +15,23 @@ public class Filter {
   /**
   * Update filter reultset rs object with sql statement and filtered values
   */
-	public Filter(String sql, String mmsi) {
+	public Filter(String sql, String mmsi, String timestamp) {
     try {
       DB DB = new DB();
-          System.out.println("1 filter");
+      System.out.println("1 filter");
 
-      DB.UpdateSQL(sql, mmsi, mmsi, mmsi);
+      DB.UpdateSQL(sql, mmsi, mmsi, timestamp);
           System.out.println("2 filter");
       int count = 0;
       int lastTime = -1;
       while(DB.rs.next()){
-  		  if (lastTime == -1) {
+        if (lastTime == -1) {
           lastTime = DB.rs.getInt("timestamp");
           System.out.printf("2,5 filter, " + lastTime);
           System.out.println("");
-
           System.out.println("3 filter");
-
         }
-          int diff = DB.rs.getInt("timestamp") - lastTime;
-
+        int diff = DB.rs.getInt("timestamp") - lastTime;
         if (diff > 3000) {
           DB thisDB = new DB();
           thisDB.UpdateSQL("SELECT * FROM shipplotter WHERE mmsi = ? and timestamp > ? and timestamp < ? ORDER BY timestamp",
