@@ -31,8 +31,8 @@ public class GenKml {
 	public String type;
 	public long timestamp;
 
-	public static void makeKml(ResultSet rs, String filname){
-    int filePrefix = 0;
+	public static void makeKml(ResultSet rs, String filename){
+        int filePrefix = 0;
 //    ResultSet rs = args[0];
 //    String filname = args[1];
 
@@ -43,7 +43,7 @@ public class GenKml {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			TransformerFactory tranFactory = TransformerFactory.newInstance(); 
-	    Transformer aTransformer = tranFactory.newTransformer(); 
+		        Transformer aTransformer = tranFactory.newTransformer(); 
 
 			Document doc = builder.newDocument();
 			Element root = doc.createElement("kml");
@@ -79,6 +79,7 @@ public class GenKml {
 			int count = 0;
 			while(rs.next()){
 				count++;
+					System.out.printf("lines %d\n "+filename, count);
 				KML.timestamp = rs.getLong("timestamp");
 				KML.id = rs.getInt("mmsi");
 				KML.name = rs.getString("name");
@@ -117,50 +118,48 @@ public class GenKml {
 				placemark.appendChild(point);
 				if(count % 10000 == 0) {
 					System.out.printf("lines %d\n", count);
-					filePrefix++;
 					Source src = new DOMSource(doc);
-					Result dest = new StreamResult(new File(filePrefix + "pm.kml"));
+					Result dest = new StreamResult(new File(filename + "-" + filePrefix + ".kml"));
+					filePrefix++;
 					aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 					aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 					aTransformer.transform(src, dest);
 
-			doc = builder.newDocument();
-			root = doc.createElement("kml");
-			root.setAttribute("xmlns", "http://earth.google.com/kml/2.1");
-			doc.appendChild(root);
-			dnode = doc.createElement("Document");
-			root.appendChild(dnode);
+					doc = builder.newDocument();
+					root = doc.createElement("kml");
+					root.setAttribute("xmlns", "http://earth.google.com/kml/2.1");
+					doc.appendChild(root);
+					dnode = doc.createElement("Document");
+					root.appendChild(dnode);
 
-			rstyle = doc.createElement("Style");
-			rstyle.setAttribute("id", "restaurantStyle");
-			ristyle = doc.createElement("IconStyle");
-			ristyle.setAttribute("id", "restaurantIcon");
-			ricon = doc.createElement("Icon");
-			riconhref = doc.createElement("href");
-			riconhref.appendChild(doc.createTextNode("http://maps.google.com/mapfiles/kml/pal2/icon63.png"));
-			rstyle.appendChild(ristyle);
-			ricon.appendChild(riconhref);
-			ristyle.appendChild(ricon);
-			dnode.appendChild(rstyle);
-			bstyle = doc.createElement("Style");
-			bstyle.setAttribute("id", "barStyle");
+					rstyle = doc.createElement("Style");
+					rstyle.setAttribute("id", "restaurantStyle");
+					ristyle = doc.createElement("IconStyle");
+					ristyle.setAttribute("id", "restaurantIcon");
+					ricon = doc.createElement("Icon");
+					riconhref = doc.createElement("href");
+					riconhref.appendChild(doc.createTextNode("http://maps.google.com/mapfiles/kml/pal2/icon63.png"));
+					rstyle.appendChild(ristyle);
+					ricon.appendChild(riconhref);
+					ristyle.appendChild(ricon);
+					dnode.appendChild(rstyle);
+					bstyle = doc.createElement("Style");
+					bstyle.setAttribute("id", "barStyle");
 
-			bistyle = doc.createElement("IconStyle");
-			bistyle.setAttribute("id", "barIcon");
-			bicon = doc.createElement("Icon");
-			biconhref = doc.createElement("href");
-			biconhref.appendChild(doc.createTextNode("http://maps.google.com/mapfiles/kml/pal2/icon27.png"));
-			bstyle.appendChild(bistyle);
-			bicon.appendChild(biconhref);
-			bistyle.appendChild(bicon);
-			dnode.appendChild(bstyle);
-
+					bistyle = doc.createElement("IconStyle");
+					bistyle.setAttribute("id", "barIcon");
+					bicon = doc.createElement("Icon");
+					biconhref = doc.createElement("href");
+					biconhref.appendChild(doc.createTextNode("http://maps.google.com/mapfiles/kml/pal2/icon27.png"));
+					bstyle.appendChild(bistyle);
+					bicon.appendChild(biconhref);
+					bistyle.appendChild(bicon);
+					dnode.appendChild(bstyle);
 				}
 			}
 
 			Source src = new DOMSource(doc);
-			filePrefix++;
-			Result dest = new StreamResult(new File( filePrefix + filname + ".kml")); 
+			Result dest = new StreamResult(new File(filename + "-" + filePrefix + ".kml")); 
 			aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			aTransformer.transform(src, dest);
