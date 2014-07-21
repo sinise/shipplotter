@@ -15,8 +15,8 @@ public class MarineTraficCrawler {
     //if wrong argument size
     if (args.length != 1) {
       System.out.println("wrong argument specification \n Use: MarineTraficCrawler.java file");
-      System.out.println("where file is a comma seperatet text file in this format <mmsi>,<name>,<html file>");
-      System.out.println("html file is optional. if not provided data will be fetched from Marinetrafic.com");
+      System.out.println("where file is a comma seperatet text file in this format <mmsi>,<name>,typecode,<html file>");
+      System.out.println("html file is optional. if not provided data will be fetched from Marinetrafic.com. typecode is the ais code specifying ship type");
     }
 
 

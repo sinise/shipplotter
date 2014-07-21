@@ -34,7 +34,7 @@ public class MarinetraficShip
         this.type = type;
         sourceType = 0;
         String htmlName = name.replace(" ", "%20"); 
-        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:5000/page:1";
+        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:1";
         url = new URL(urlString);
       }
       catch (Exception e) {
@@ -88,12 +88,13 @@ public class MarinetraficShip
           int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
             if (parsedData.length() > 20){
+		System.out.println(parsedData);
               String[] lineSplit = parsedData.split(",");
               String time = lineSplit[0];
-              String speed = lineSplit[1];
-              String lon = lineSplit[2];
-              String lat = lineSplit[3];
-              String course = lineSplit[4];
+              String speed = lineSplit[2];
+              String lon = lineSplit[3];
+              String lat = lineSplit[4];
+              String course = lineSplit[5];
               list.add(mmsi + "," + time.substring(0, 10) + ",0," + type +"," + lat + "," + lon + "," + speed + "," + course + ",0,0,0,0," +
                        name + ",0,0,0,0,0,0,0,0,0");
             }

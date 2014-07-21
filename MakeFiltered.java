@@ -45,11 +45,9 @@ public class MakeFiltered {
       System.out.println("createt filter");
 
       for(int i = 0; i < myFilter.results.size(); i++) {
-      System.out.println("start forloop");
 
-        String filname = "-" + filePrefix + "-" + mmsi;
+        String filname = name + "-" + mmsi + "-" + filePrefix;
         GenKml.makeKml(myFilter.results.get(i), filname);
-      System.out.println("in for loop after GenKml");
 
         filePrefix++;
 
