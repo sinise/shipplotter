@@ -111,7 +111,7 @@ public class MarinetraficShip
           }
         }
 
-        for(page = 1; page < 10; page++) {
+        for(page = 1; page < lastPage; page++) {
           urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
           url = new URL(urlString);
           uc = url.openConnection();
@@ -120,6 +120,7 @@ public class MarinetraficShip
           uc.connect();
           in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
           trimData();
+	  System.out.println("page " + page + " of " + lastPage);
         }
       }
       if (sourceType == 0) {
@@ -157,7 +158,7 @@ public class MarinetraficShip
           int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
             if (parsedData.length() > 20){
-           		System.out.println(parsedData);
+//           		System.out.println(parsedData);
               String[] lineSplit = parsedData.split(",");
               String time = lineSplit[0];
               String speed = lineSplit[2];
