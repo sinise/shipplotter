@@ -34,8 +34,9 @@ public class MarineTraficCrawler {
       // for either html or url source
       while ((ship = in.readLine()) != null) {
         String[] newShip = ship.split(",");
+        System.out.println("line has so many arguments" + newShip.length);
         if (newShip.length == 5) {
-          shipsUrlLogin.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3]));
+          shipsUrlLogin.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3], newShip[4]));
         }
         if (newShip.length == 4) {
           shipsHtml.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3]));

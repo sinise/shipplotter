@@ -13,7 +13,7 @@ public class MarinetraficShip
 {
   private URL url;
   private URLConnection uc;
-  private String urlstring;
+  private String urlString;
   private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
   private ArrayList<String> list = new ArrayList<String>();
   private BufferedReader in;
@@ -23,6 +23,9 @@ public class MarinetraficShip
   public String type;
   private String file;
   private String cookie;
+  private String htmlName;
+  private int page;
+  private int lastPage;
     /**
      *Constructor for a Marinetrafic ship to fetch from url
      *@param mmsi mmsi of ship
@@ -34,8 +37,8 @@ public class MarinetraficShip
         this.name = name;
         this.type = type;
         sourceType = 0;
-        String htmlName = name.replace(" ", "%20"); 
-        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:1";
+        htmlName = name.replace(" ", "%20"); 
+        urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:1";
         url = new URL(urlString);
       }
       catch (Exception e) {
@@ -56,9 +59,7 @@ public class MarinetraficShip
         this.type = type;
         this.cookie = cookie;
         sourceType = 2;
-        String htmlName = name.replace(" ", "%20"); 
-        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:1";
-        url = new URL(urlString);
+        htmlName = name.replace(" ", "%20"); 
       }
       catch (Exception e) {
         System.err.println("Error: " + e.getMessage());
@@ -90,30 +91,67 @@ public class MarinetraficShip
   public void fetchData() {
     try {
       if (sourceType == 2) {
+        System.out.println("sourcetype er 2");
+
+        urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
+        url = new URL(urlString);
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
         uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
         uc.connect();
         in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+        String ch;
+        String regEx = "<span>1 of";
+        while ((ch = in.readLine()) != null) {
+          if (ch.contains(regEx)) {
+            int indexEnd = ch.lastIndexOf("</span>");
+            int  indexStart = ch.indexOf("<span>") + 11;
+            lastPage = Integer.parseInt(ch.substring(indexStart, indexEnd));
+            System.out.println(lastPage);
+          }
+        }
+
+        for(page = 1; page < 10; page++) {
+          urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
+          url = new URL(urlString);
+          uc = url.openConnection();
+          uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
+          uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
+          uc.connect();
+          in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+          trimData();
+        }
       }
       if (sourceType == 0) {
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
         uc.connect();
         in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+        trimData();
+
       }
-        if (sourceType == 1) {
+      if (sourceType == 1) {
         System.out.printf("feching from file %s\n", name);
         FileInputStream fstream = new FileInputStream(file);
         DataInputStream fin = new DataInputStream(fstream);
         in = new BufferedReader(new InputStreamReader(fin));
+        trimData();
       }
+    }
+    catch (Exception e) {
+      System.err.println("Error: " + e.getMessage());
+    }
+  }
+
+// trim the data and put in the array list which can be acceced from other classes
+  public void trimData() {
+    try{
       String ch;
       String parsedData = "";
       String regEx = "<td><span>";
       String regStartLine = "<tr><td><span>";
       while ((ch = in.readLine()) != null) {
-        System.out.println(ch);
+//        System.out.println(ch);
         if (ch.contains(regEx)) {
           int indexEnd = ch.lastIndexOf("</span>");
           int  indexStart = ch.indexOf("<span>") + 6;
