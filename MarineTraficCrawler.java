@@ -10,13 +10,15 @@ public class MarineTraficCrawler {
   public static void main(String[] args) throws Exception {
     ArrayList<MarinetraficShip> shipsHtml = new ArrayList<MarinetraficShip>();
     ArrayList<MarinetraficShip> shipsUrl = new  ArrayList<MarinetraficShip>();
+    ArrayList<MarinetraficShip> shipsUrlLogin = new  ArrayList<MarinetraficShip>();
     ArrayList<String> errors = new ArrayList<String>();
 
     //if wrong argument size
     if (args.length != 1) {
       System.out.println("wrong argument specification \n Use: MarineTraficCrawler.java file");
-      System.out.println("where file is a comma seperatet text file in this format <mmsi>,<name>,typecode,<html file>");
-      System.out.println("html file is optional. if not provided data will be fetched from Marinetrafic.com. typecode is the ais code specifying ship type");
+      System.out.println("where file is a comma seperatet text file in this format <mmsi>,<name>,typecode,<html file>,cookiefile");
+      System.out.println("html and cookie files are optional. if not provided data will be fetched from Marinetrafic.com. typecode is the ais code specifying ship type");
+      System.out.println("If cookie file is used the name of the given html file is not used. but some random tekst need to be there as the way to tell if it should use login is to count the number of arguments");
     }
 
 
@@ -32,13 +34,16 @@ public class MarineTraficCrawler {
       // for either html or url source
       while ((ship = in.readLine()) != null) {
         String[] newShip = ship.split(",");
+        if (newShip.length == 5) {
+          shipsUrlLogin.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3]));
+        }
         if (newShip.length == 4) {
           shipsHtml.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3]));
         }
         if (newShip.length == 3) {
           shipsUrl.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2]));
         }
-        if (newShip.length != 3 && newShip.length != 4) {
+        if (newShip.length != 3 && newShip.length != 4 && newShip.length != 5) {
           errors.add(ship);
         }
         System.out.printf("There was %d errors, when fetching ship ½s from file", errors.size(), newShip[1]);
@@ -46,6 +51,11 @@ public class MarineTraficCrawler {
 
       }
 
+      //fetch data for each ship with html source using login cookie
+      for (int i = 0; i < shipsUrlLogin.size(); i++) {
+        shipsUlrLogin.get(i).fetchData();
+          DB.upload(shipsUrlLogin.get(i).getData());
+      }
       //fetch data for each ship with html source
       for (int i = 0; i < shipsHtml.size(); i++) {
         shipsHtml.get(i).fetchData();
