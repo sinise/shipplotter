@@ -22,6 +22,7 @@ public class MarinetraficShip
   public String name;
   public String type;
   private String file;
+  private String cookie;
     /**
      *Constructor for a Marinetrafic ship to fetch from url
      *@param mmsi mmsi of ship
@@ -41,9 +42,31 @@ public class MarinetraficShip
         System.err.println("Error: " + e.getMessage());
       }
     }
-
     /**
      *Constructor for a Marinetrafic ship to fetch from url
+     *@param mmsi mmsi of ship
+     *@param name name of ship entered exactly as marinetrafic does. is casesentitive
+     *@param file is not used for anything so just type something
+     *@param cookie the txt file containing the cookie
+     */
+    public MarinetraficShip(String mmsi, String name, String type, String file, String cookie) {
+      try {
+        this.mmsi = mmsi;
+        this.name = name;
+        this.type = type;
+        this.cookie = cookie;
+        sourceType = 2;
+        String htmlName = name.replace(" ", "%20"); 
+        String urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:1";
+        url = new URL(urlString);
+      }
+      catch (Exception e) {
+        System.err.println("Error: " + e.getMessage());
+      }
+    }
+
+    /**
+     *Constructor for a Marinetrafic ship to fetch from url with login
      *@param mmsi mmsi of ship
      *@param name name of ship entered exactly as marinetrafic does. is casesentitive
      *@param file file to fetch from
@@ -66,13 +89,20 @@ public class MarinetraficShip
 }
   public void fetchData() {
     try {
-      if (sourceType == 0) {
+      if (sourceType == 2) {
         uc = url.openConnection();
-        uc.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+        uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
+        uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
         uc.connect();
         in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
       }
-      if (sourceType == 1) {
+      if (sourceType == 0) {
+        uc = url.openConnection();
+        uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
+        uc.connect();
+        in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+      }
+        if (sourceType == 1) {
         System.out.printf("feching from file %s\n", name);
         FileInputStream fstream = new FileInputStream(file);
         DataInputStream fin = new DataInputStream(fstream);
@@ -83,12 +113,13 @@ public class MarinetraficShip
       String regEx = "<td><span>";
       String regStartLine = "<tr><td><span>";
       while ((ch = in.readLine()) != null) {
+        System.out.println(ch);
         if (ch.contains(regEx)) {
           int indexEnd = ch.lastIndexOf("</span>");
           int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
             if (parsedData.length() > 20){
-		System.out.println(parsedData);
+           		System.out.println(parsedData);
               String[] lineSplit = parsedData.split(",");
               String time = lineSplit[0];
               String speed = lineSplit[2];
