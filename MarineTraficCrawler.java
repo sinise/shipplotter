@@ -38,12 +38,12 @@ public class MarineTraficCrawler {
         if (newShip.length == 5) {
           shipsUrlLogin.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3], newShip[4]));
         }
-        if (newShip.length == 4) {
+        if (newShip.length == 40) {
           shipsHtml.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3]));
         }
-        if (newShip.length == 3) {
+        if (newShip.length == 4) {
 //          shipsUrl.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2]));
-          shipsUrlLogin.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], "sdfs", "sdfs"));
+          shipsUrlLogin.add(new MarinetraficShip(newShip[0], newShip[1], newShip[2], newShip[3], "sdfs"));
         }
         if (newShip.length != 3 && newShip.length != 4 && newShip.length != 5) {
           errors.add(ship);

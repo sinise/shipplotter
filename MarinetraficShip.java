@@ -26,6 +26,7 @@ public class MarinetraficShip
   private String htmlName;
   private int page;
   private int lastPage;
+  private int start;
     /**
      *Constructor for a Marinetrafic ship to fetch from url
      *@param mmsi mmsi of ship
@@ -52,12 +53,13 @@ public class MarinetraficShip
      *@param file is not used for anything so just type something
      *@param cookie the txt file containing the cookie
      */
-    public MarinetraficShip(String mmsi, String name, String type, String file, String cookie) {
+    public MarinetraficShip(String mmsi, String name, String type, String start, String cookie) {
       try {
         this.mmsi = mmsi;
         this.name = name;
         this.type = type;
         this.cookie = cookie;
+        this.start = Integer.parseInt(start);
         sourceType = 2;
         htmlName = name.replace(" ", "%20"); 
       }
@@ -111,7 +113,7 @@ public class MarinetraficShip
           }
         }
 
-        for(page = 1; page < lastPage; page++) {
+        for(page = start; page < lastPage; page++) {
           urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
           url = new URL(urlString);
           uc = url.openConnection();
