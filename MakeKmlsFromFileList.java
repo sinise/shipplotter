@@ -12,13 +12,14 @@ public class MakeKmlsFromFileList {
 	public static void main(String[] args){
 		int filePrefix = 0;
     if (args.length != 1) {
-      System.out.println("Commandline argument must be a comma seperatet textfile in this format <mmsi>,<name>,...  were the dots can be any value. Only first to values in the file are used");
+      System.out.println("Commandline argument must be a comma seperatet textfile in this format <mmsi>,<name>,<speedTreshold>..  Where the dots can be any value. Only first 3 values in the file are used");
+      System.out.println("speedTreshold is the speed limet where the dots change colour");
       return;
     }
 
     try {
       String file = args[0];
-      String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and timestamp < ? ORDER BY timestamp";
+      String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi = ? ORDER BY timestamp";
       String ship;
       String timestamp = "1404086760";
       FileInputStream fstream = new FileInputStream(file);
@@ -30,8 +31,9 @@ public class MakeKmlsFromFileList {
         String[] newShip = ship.split(",");
         String mmsi = newShip[0];
         String name = newShip[1];
-        DB.UpdateSQL(sql, mmsi, mmsi, timestamp);
-        GenKml.makeKml(DB.rs, name);
+        String speedTreshold = newShip[2];
+        DB.UpdateSQL(sql, mmsi, mmsi, mmsi);
+        GenKml.makeKml(DB.rs, name, speedTreshold);
       }
     } catch (Exception e) {
         System.out.println(e);
