@@ -122,7 +122,7 @@ public class MarinetraficShip
           uc.connect();
           in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
           trimData();
-	  System.out.println("page " + page + " of " + lastPage);
+	  System.out.println(" " + page + " of " + lastPage);
         }
       }
       if (sourceType == 0) {
@@ -182,7 +182,7 @@ public class MarinetraficShip
           }
         }
       }
-      System.out.println(name);
+      System.out.print(name);
       System.out.printf("Fetched %d positions", list.size());
       in.close();
     }
