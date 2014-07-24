@@ -112,17 +112,23 @@ public class MarinetraficShip
             System.out.println(lastPage);
           }
         }
-
-        for(page = start; page < lastPage; page++) {
-          urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
-          url = new URL(urlString);
-          uc = url.openConnection();
-          uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
-          uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
-          uc.connect();
-          in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-          trimData();
-	  System.out.println(" " + page + " of " + lastPage);
+        page = start;
+        for(int i = 0; page < lastPage + 1; i++) {
+          try{
+            urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
+            url = new URL(urlString);
+            uc = url.openConnection();
+            uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
+            uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
+            uc.connect();
+            in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
+            trimData();
+            System.out.println(" " + page + " of " + lastPage);
+            page++;
+          }
+            catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+          }
         }
       }
       if (sourceType == 0) {
