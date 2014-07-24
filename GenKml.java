@@ -115,12 +115,12 @@ public class GenKml {
 				Element placemark = doc.createElement("Placemark");
 				dnode.appendChild(placemark);
 
-				Element name = doc.createElement("name");
-				name.appendChild(doc.createTextNode(KML.name));
-				placemark.appendChild(name);
+//				Element name = doc.createElement("name");
+//				name.appendChild(doc.createTextNode(KML.name));
+//				placemark.appendChild(name);
 
 				Element descrip = doc.createElement("description");
-				descrip.appendChild(doc.createTextNode("speed " + speed + "\n" + KML.name));
+				descrip.appendChild(doc.createTextNode("speed " + speed + "  " + KML.name + "  mmsi "));
 				placemark.appendChild(descrip);
 
 				Element styleUrl = doc.createElement("styleUrl");
