@@ -31,7 +31,7 @@ public class GenKml {
 	public String type;
 	public long timestamp;
 
-	public static void makeKml(ResultSet rs, String filename){
+	public static void makeKml(ResultSet rs, String filename, String speedTreshold){
         int filePrefix = 0;
 //    ResultSet rs = args[0];
 //    String filname = args[1];

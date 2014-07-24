@@ -18,15 +18,16 @@ public class MakeFiltered {
   public long timestamp;
 
   public static void main(String[] args){
-    if (args.length != 1) {
-      System.out.println("Commandline argument must be a file");
+    if (args.length != 2) {
+      System.out.println("Commandline argument must be a file with ships followed by the speedTreshold. See MakeKmlFromFile.java for more info");
       return;
     }
     try {
     String file = args[0];
+    String speedTreshold = args[1];
 //    String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi = ? ORDER BY timestamp";
     String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and timestamp < ? ORDER BY timestamp";
-    String timestamp = "1404086760";
+    String timestamp = "1404086760999";
     String ship;
     FileInputStream fstream = new FileInputStream(file);
     DataInputStream fin = new DataInputStream(fstream);
@@ -47,7 +48,7 @@ public class MakeFiltered {
       for(int i = 0; i < myFilter.results.size(); i++) {
 
         String filname = name + "-" + mmsi + "-" + filePrefix;
-        GenKml.makeKml(myFilter.results.get(i), filname);
+        GenKml.makeKml(myFilter.results.get(i), filname, speedTreshold);
 
         filePrefix++;
 
