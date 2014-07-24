@@ -21,7 +21,7 @@ public class MakeKmlsFromFileList {
 
     try {
       String file = args[0];
-      String speedTreshold = args[0];
+      float speedTreshold = Float.valueOf(args[1]);
       String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi = ? ORDER BY timestamp";
       String ship;
       String timestamp = "1404086760";

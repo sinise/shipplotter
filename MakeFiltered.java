@@ -24,7 +24,7 @@ public class MakeFiltered {
     }
     try {
     String file = args[0];
-    String speedTreshold = args[1];
+    float speedTreshold = Float.valueOf(args[1]);
 //    String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi = ? ORDER BY timestamp";
     String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and timestamp < ? ORDER BY timestamp";
     String timestamp = "1404086760999";
