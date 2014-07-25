@@ -47,7 +47,7 @@ public class MarinetraficShip
       }
     }
     /**
-     *Constructor for a Marinetrafic ship to fetch from url
+     *Constructor for a Marinetrafic ship to fetch from url with login
      *@param mmsi mmsi of ship
      *@param name name of ship entered exactly as marinetrafic does. is casesentitive
      *@param file is not used for anything so just type something
@@ -92,14 +92,16 @@ public class MarinetraficShip
 }
   public void fetchData() {
     try {
-      if (sourceType == 2) {
-        System.out.println("sourcetype er 2");
+      if (sourceType == 2 || sourceType == 0) {
+        System.out.println("sourcetype er" + sourceType);
 
         urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
         url = new URL(urlString);
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
-        uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
+        if(sourceType == 2){
+          uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
+        }
         uc.connect();
         in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
         String ch;
@@ -131,7 +133,7 @@ public class MarinetraficShip
           }
         }
       }
-      if (sourceType == 0) {
+/*      if (sourceType == 0) {
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
         uc.connect();
@@ -139,6 +141,7 @@ public class MarinetraficShip
         trimData();
 
       }
+*/
       if (sourceType == 1) {
         System.out.printf("feching from file %s\n", name);
         FileInputStream fstream = new FileInputStream(file);
