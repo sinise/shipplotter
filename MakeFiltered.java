@@ -18,15 +18,19 @@ public class MakeFiltered {
   public long timestamp;
 
   public static void main(String[] args){
-    if (args.length != 2) {
-      System.out.println("Commandline argument must be a file with ships followed by the speedTreshold. See MakeKmlFromFile.java for more info");
+    if (args.length != 3) {
+      System.out.println("Commandline argument must be a file with ships followed by the speedTreshold and the time i ms. of the fall out");
+      System.out.println("use java MakeFilered <ships-file> <speed> <fallout in s>");
+      System.out.println("Ex. java MakeFilered ships.csv 4.5 86400");
       return;
     }
     try {
     String file = args[0];
     float speedTreshold = Float.valueOf(args[1]);
-//    String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and mmsi = ? ORDER BY timestamp";
+    int fallOut = Integer.parseInt(args[2]);
     String sql = "SELECT * FROM shipplotter WHERE mmsi = ? and mmsi = ? and timestamp < ? ORDER BY timestamp";
+
+    //only export positions up to this timestamp. set it high if you want all positions
     String timestamp = "1404086760999";
     String ship;
     FileInputStream fstream = new FileInputStream(file);
@@ -37,12 +41,11 @@ public class MakeFiltered {
     while ((ship = in.readLine()) != null) {
       System.out.println("start whileloop");
 
-//      System.in.read();
       int filePrefix = 0;
       String[] newShip = ship.split(",");
       String mmsi = newShip[0];
       String name = newShip[1];
-      Filter myFilter = new Filter(sql, mmsi, timestamp);
+      Filter myFilter = new Filter(sql, mmsi, timestamp, fallOut);
       System.out.println("createt filter");
 
       for(int i = 0; i < myFilter.results.size(); i++) {

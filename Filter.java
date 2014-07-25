@@ -18,7 +18,7 @@ public class Filter {
   * @mmsi the mmsi value
   * @timestamp get positions no later than the given timestamp.
   */
-	public Filter(String sql, String mmsi, String timestamp) {
+	public Filter(String sql, String mmsi, String timestamp, int fallOut) {
     try {
       DB DB = new DB();
       DB.UpdateSQL(sql, mmsi, mmsi, timestamp);
@@ -30,7 +30,7 @@ public class Filter {
         }
 
         int diff = DB.rs.getInt("timestamp") - lastTime;
-        if (diff > 3000) {
+        if (diff > fallOut) {
           if (validPosition(DB.rs.getFloat("lat"), DB.rs.getFloat("lon"))) {
             DB thisDB = new DB();
             thisDB.UpdateSQL("SELECT * FROM shipplotter WHERE mmsi = ? and timestamp > ? and timestamp < ? ORDER BY timestamp",
