@@ -47,7 +47,7 @@ public class MakeFiltered {
 
       for(int i = 0; i < myFilter.results.size(); i++) {
 
-        String filname = name + "-" + mmsi + "-" + filePrefix;
+        String filname = name + "-" + mmsi + "-" + filePrefix + "-diff=" + myFilter.resultsDiff.get(i);
         GenKml.makeKml(myFilter.results.get(i), filname, speedTreshold);
 
         filePrefix++;

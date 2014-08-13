@@ -38,7 +38,7 @@ public class MarinetraficShip
         this.name = name;
         this.type = type;
         sourceType = 0;
-        htmlName = name.replace(" ", "%20"); 
+        htmlName = name.replace(" ", "%20");
         urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:1";
         url = new URL(urlString);
       }
@@ -69,7 +69,7 @@ public class MarinetraficShip
     }
 
     /**
-     *Constructor for a Marinetrafic ship to fetch from url with login
+     *Constructor for a Marinetrafic ship to fetch from file
      *@param mmsi mmsi of ship
      *@param name name of ship entered exactly as marinetrafic does. is casesentitive
      *@param file file to fetch from
@@ -93,7 +93,7 @@ public class MarinetraficShip
   public void fetchData() {
     try {
       if (sourceType == 2 || sourceType == 0) {
-        System.out.println("sourcetype er" + sourceType);
+        System.out.println("sourcetype er " + sourceType);
 
         urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
         url = new URL(urlString);
@@ -105,11 +105,16 @@ public class MarinetraficShip
         uc.connect();
         in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
         String ch;
-        String regEx = "<span>1 of";
+//        String regEx = "<span>1 of";
+        String regEx = "</i></a></span></div>";
         while ((ch = in.readLine()) != null) {
+//   System.out.println(ch);
+
           if (ch.contains(regEx)) {
-            int indexEnd = ch.lastIndexOf("</span>");
-            int  indexStart = ch.indexOf("<span>") + 11;
+//            int indexEnd = ch.lastIndexOf("</span>");
+            int indexEnd = ch.lastIndexOf("type=") - 2;
+//            int  indexStart = ch.indexOf("<span>") + 11;
+            int  indexStart = ch.indexOf("max=") + 5;
             lastPage = Integer.parseInt(ch.substring(indexStart, indexEnd));
             System.out.println(lastPage);
           }
@@ -121,7 +126,7 @@ public class MarinetraficShip
             url = new URL(urlString);
             uc = url.openConnection();
             uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
-            uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
+//            uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
             uc.connect();
             in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
             trimData();
