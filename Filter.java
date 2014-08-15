@@ -13,6 +13,8 @@ public class Filter {
 	public long timestamp;
   public ArrayList<ResultSet> results = new ArrayList<ResultSet>();
   public ArrayList<Integer> resultsTimeSpan = new ArrayList<Integer>();
+  public ArrayList<Integer> resultsTimeFallout = new ArrayList<Integer>();
+
   /**
   * Update filter reultset rs object with sql statement and filtered values
   * @sql the sqlstring as prepared statement with 3 values
@@ -38,6 +40,7 @@ public class Filter {
                               mmsi, Long.toString(lastTime - 18000), "" + (lastTime + 18000));
             results.add(thisDB.rs);
             resultsTimeSpan.add(diff);
+            resultsTimeFallout.add(lastTime);
             System.out.printf("added one resultset. resultets = %d\n", results.size());
           }
         }

@@ -31,7 +31,7 @@ public class GenKml {
 	public String type;
 	public long timestamp;
 
-	public static void makeKml(ResultSet rs, String filename, float speedTreshold){
+	public static void makeKml(ResultSet rs, String filename, float speedTreshold, int timeFallout){
         int filePrefix = 0;
 //    ResultSet rs = args[0];
 //    String filname = args[1];
@@ -120,7 +120,7 @@ public class GenKml {
 //				placemark.appendChild(name);
 
 				Element descrip = doc.createElement("description");
-				descrip.appendChild(doc.createTextNode("speed " + speed + "  " + KML.name + "  time " + formatedTime));
+				descrip.appendChild(doc.createTextNode("s " + speed + "  " + KML.name + "  time " + formatedTime));
 				placemark.appendChild(descrip);
 
 				Element styleUrl = doc.createElement("styleUrl");
@@ -143,7 +143,9 @@ public class GenKml {
 					System.out.println("1");
 
 					Source src = new DOMSource(doc);
-					Result dest = new StreamResult(new File(filename + "-" + filePrefix + ".kml"));
+  				String formatedTimeFallout = format.format(timeFallout * 1000);
+
+					Result dest = new StreamResult(new File(filename + "--" + formatedTimeFallout + "--" +filePrefix + ".kml"));
 					filePrefix++;
 					aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 					aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");

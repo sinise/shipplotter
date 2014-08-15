@@ -35,7 +35,7 @@ public class MakeKmlsFromFileList {
         String mmsi = newShip[0];
         String name = newShip[1];
         DB.UpdateSQL(sql, mmsi, mmsi, mmsi);
-        GenKml.makeKml(DB.rs, name, speedTreshold);
+        GenKml.makeKml(DB.rs, name, speedTreshold, 0);
       }
     } catch (Exception e) {
         System.out.println(e);
