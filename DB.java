@@ -132,4 +132,62 @@ public class DB
     System.out.println("");
 
   }
+
+
+
+
+
+
+  public void uploadArea(String[] line) throws Exception
+  {
+    PreparedStatement preparedStatement = null;
+    Connection connection = null;
+
+    try
+      {
+        Class.forName("com.mysql.jdbc.Driver");
+      }
+      catch (ClassNotFoundException e) {
+        System.out.println("MySQL JDBC Driver not found !!");
+        return;
+      }
+
+    System.out.println("MySQL JDBC Driver Registered!");
+    int count = 0;
+    try {
+      connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
+      for (int i = 0; i < line.length; i++)
+      {
+	      String[] la = line[i].split(",");
+              count++;
+	     // if ((count % 1000) == 0) {
+                System.out.println(line[i]);
+        //      }
+	      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO areas values (?, ?, ?)");
+	      preparedStatement.setString(1, la[0]);
+	      preparedStatement.setString(2, la[1]);
+	      preparedStatement.setString(3, la[2]);
+	      preparedStatement.executeUpdate();
+      }
+    } catch (SQLException e) {
+    System.out.println("Connection Failed! Check output console");
+    System.out.println(e);
+    return;
+    } finally {
+      try {
+        if(connection != null)
+        connection.close();
+        System.out.println("Connection closed !!");
+	    }
+      catch (SQLException e) {
+        e.printStackTrace();
+      }
+    }
+    System.out.println("");
+  }
+
+
+
+
+
 }
