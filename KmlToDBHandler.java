@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 
 public class KmlToDBHandler
 {
-  private ArrayList<String> pointList = new ArrayList<String>();
+  public ArrayList<String> pointList = new ArrayList<String>();
   private BufferedReader in;
   public String name;
   public String type;
@@ -29,15 +29,15 @@ public class KmlToDBHandler
       }
     }
 
-/*  public String[] getData() {
+  public String[] getData() {
     int length = pointList.size();
-    float[][] returnArray = new float[length][2];
+    String[] returnArray = new String[length];
     for (int i = 0; i < length; i++) {
-      returnArray[i][i] = pointList.get(i);
+      returnArray[i] = pointList.get(i);
     }
     return returnArray;
   }
-*/
+
   public void fetchData() {
     try {
       System.out.printf("feching from kml file %s\n", file);
@@ -91,9 +91,9 @@ public class KmlToDBHandler
           //find coordinates
           while(!(ch = in.readLine()).contains("</coordinates>")){
             if (ch.contains("<coordinates>")){
-              String line = typeName + ",0 " + polyName + ",0 " + in.readLine();
-              System.out.println(line);
-              System.out.println("---------------------------------------------------");
+              String line = typeName + ":" + polyName + ":" + in.readLine();
+//              System.out.println(line);
+//              System.out.println("---------------------------------------------------");
               pointList.add(line);
             }
           }

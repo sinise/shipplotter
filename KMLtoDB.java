@@ -34,7 +34,7 @@ public class KMLtoDB {
 //    fetch data for each file and upload to DB
       for (int i = 0; i < kmlFiles.size(); i++) {
         kmlFiles.get(i).fetchData();
-//      DB.upload(kmlFiles.get(i).getData());
+        DB.uploadArea(kmlFiles.get(i).getData());
       }
     }
     catch (Exception e) {

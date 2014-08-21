@@ -89,7 +89,7 @@ public class MarinetraficShip
       returnArray[i] = list.get(i);
     }
     return returnArray;
-}
+  }
   public void fetchData() {
     try {
       if (sourceType == 2 || sourceType == 0) {

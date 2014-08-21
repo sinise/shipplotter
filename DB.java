@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.sql.*;
 public class DB
 {
@@ -133,11 +134,6 @@ public class DB
 
   }
 
-
-
-
-
-
   public void uploadArea(String[] line) throws Exception
   {
     PreparedStatement preparedStatement = null;
@@ -158,16 +154,36 @@ public class DB
       connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
       for (int i = 0; i < line.length; i++)
       {
-	      String[] la = line[i].split(",");
-              count++;
-	     // if ((count % 1000) == 0) {
-                System.out.println(line[i]);
-        //      }
-	      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO areas values (?, ?, ?)");
-	      preparedStatement.setString(1, la[0]);
-	      preparedStatement.setString(2, la[1]);
-	      preparedStatement.setString(3, la[2]);
+	      String[] la = line[i].split(":");
+        count++;
+        String[] poly = la[2].split(",0 ");
+        String polyStatement = "";
+
+        for(int j = 0; j < poly.length; j++){
+          polyStatement = polyStatement + poly[j].trim().replace(",", " ");
+          if(j + 1 < poly.length){
+            polyStatement = polyStatement + ",";
+          }
+        }
+          System.out.println(la[0].replace("\"", " "));
+          System.out.println(la[1].replace("\"", " "));
+
+          System.out.println("print statement");
+          System.out.println(polyStatement);
+
+
+	      preparedStatement = connection.prepareStatement("INSERT INTO areas (type, name, area) values (?, ?, ?)");
+	      preparedStatement.setString(1, la[0].replace("\"", " "));
+	      preparedStatement.setString(2, la[1].replace("\"", " "));
+	      preparedStatement.setString(3, polyStatement);
 	      preparedStatement.executeUpdate();
+
+        Scanner in2 = new Scanner(System.in);
+        System.out.println("Enter for next");
+        String s = in2.nextLine();
+          System.out.println("");
+          System.out.println("");
+ 
       }
     } catch (SQLException e) {
     System.out.println("Connection Failed! Check output console");
@@ -185,9 +201,4 @@ public class DB
     }
     System.out.println("");
   }
-
-
-
-
-
 }
