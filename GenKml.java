@@ -138,7 +138,7 @@ public class GenKml {
 				coordinates.appendChild(doc.createTextNode(KML.lng+ "," + KML.lat));
 				point.appendChild(coordinates);
 				placemark.appendChild(point);
-				if(count % 10000 == 0) {
+				if(count % 1000 == 0) {
 					System.out.printf("lines %d\n", count);
 					System.out.println("1");
 

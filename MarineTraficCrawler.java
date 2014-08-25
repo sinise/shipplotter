@@ -55,12 +55,12 @@ public class MarineTraficCrawler {
       //fetch data for each ship with html source using login cookie
       for (int i = 0; i < shipsUrlLogin.size(); i++) {
         shipsUrlLogin.get(i).fetchData();
-          DB.upload(shipsUrlLogin.get(i).getData());
+        DB.upload(shipsUrlLogin.get(i).getData());
       }
       //fetch data for each ship with html source
       for (int i = 0; i < shipsHtml.size(); i++) {
         shipsHtml.get(i).fetchData();
-          DB.upload(shipsHtml.get(i).getData());
+        DB.upload(shipsHtml.get(i).getData());
       }
 
       //fetch data for each ship in url source

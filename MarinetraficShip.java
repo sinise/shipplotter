@@ -24,6 +24,7 @@ public class MarinetraficShip
   private String file;
   private String cookie;
   private String htmlName;
+
   private int page;
   private int lastPage;
   private int start;
@@ -99,7 +100,7 @@ public class MarinetraficShip
         url = new URL(urlString);
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
-        if(sourceType == 2){
+        if(sourceType == 0){
           uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
         }
         uc.connect();
@@ -119,14 +120,14 @@ public class MarinetraficShip
             System.out.println(lastPage);
           }
         }
-        page = start;
+        page = 0;
         for(int i = 0; page < lastPage + 1; i++) {
           try{
             urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
             url = new URL(urlString);
             uc = url.openConnection();
             uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
-//            uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
+            uc.setRequestProperty("Cookie", "AUTH=EMAIL=tony.sadownichik@greenpeace.org&CHALLENGE=US1KIfRUfmcsKeERcCip; mt_user[User][ID]=Q2FrZQ%3D%3D.f0rvCaXH");
             uc.connect();
             in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
             trimData();
@@ -165,16 +166,20 @@ public class MarinetraficShip
     try{
       String ch;
       String parsedData = "";
-      String regEx = "<td><span>";
-      String regStartLine = "<tr><td><span>";
+      String regEx = "<td data-column=";
+      String regExNot = "<a href=";
+      String regStartLine = "<tr><td data-column=";
       while ((ch = in.readLine()) != null) {
-//        System.out.println(ch);
-        if (ch.contains(regEx)) {
+//          System.out.println(ch);
+
+        if (ch.contains(regEx) && !(ch.contains(regExNot))) {
+//          System.out.println(ch);
+
           int indexEnd = ch.lastIndexOf("</span>");
           int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
             if (parsedData.length() > 20){
-//           		System.out.println(parsedData);
+           		System.out.println("before print parsed data");
               String[] lineSplit = parsedData.split(",");
               String time = lineSplit[0];
               String speed = lineSplit[2];
@@ -193,6 +198,8 @@ public class MarinetraficShip
           }
           else {
             parsedData = parsedData + ("," + ch.substring(indexStart, indexEnd));
+           		System.out.println(parsedData);
+
           }
         }
       }
