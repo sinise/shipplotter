@@ -179,7 +179,6 @@ public class MarinetraficShip
           int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
             if (parsedData.length() > 20){
-           		System.out.println("before print parsed data");
               String[] lineSplit = parsedData.split(",");
               String time = lineSplit[0];
               String speed = lineSplit[2];
@@ -198,7 +197,7 @@ public class MarinetraficShip
           }
           else {
             parsedData = parsedData + ("," + ch.substring(indexStart, indexEnd));
-           		System.out.println(parsedData);
+//           		System.out.println(parsedData);
 
           }
         }
