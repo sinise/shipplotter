@@ -172,7 +172,7 @@ public class DB
           System.out.println(polyStatement);
 
 
-	      preparedStatement = connection.prepareStatement("INSERT INTO areas (type, name, area) values (?, ?, ?)");
+	      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO areas (type, name, area) values (?, ?, ?)");
 	      preparedStatement.setString(1, la[0].replace("\"", " "));
 	      preparedStatement.setString(2, la[1].replace("\"", " "));
 	      preparedStatement.setString(3, polyStatement);
