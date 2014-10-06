@@ -19,9 +19,9 @@ public class MakeFiltered {
 
   public static void main(String[] args){
     if (args.length != 3) {
-      System.out.println("Commandline argument must be a file with ships followed by the speedTreshold and the time i ms. of the fall out");
-      System.out.println("use java MakeFilered <ships-file> <speed> <fallout in s>");
-      System.out.println("Ex. java MakeFilered ships.csv 4.5 86400");
+      System.out.println("\nCommandline argument must be a file with ships followed by the speedTreshold and the time i ms. of the fall out\n");
+      System.out.println("    use java MakeFilered <ships-file> <speed> <fallout in s>");
+      System.out.println("    Ex. java MakeFilered ships.csv 4.5 86400\n");
       return;
     }
     try {
