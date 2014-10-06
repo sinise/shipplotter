@@ -10,14 +10,15 @@ import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 
 public class AreaTest {
+    ArrayList<Polygon2D> legal = new ArrayList<Polygon2D>();
+    ArrayList<Polygon2D> illegal = new ArrayList<Polygon2D>();
+
 
   /**
    *  Construkter for AreaTest.
    */
   public AreaTest(){
     try {
-      ArrayList<Polygon2D> legal = new ArrayList<Polygon2D>();
-      ArrayList<Polygon2D> ilegal = new ArrayList<Polygon2D>();
 
       //get the arreas
       System.out.println("");
@@ -28,21 +29,21 @@ public class AreaTest {
 
       while(DB.rs.next()){
         int typeCode = DB.rs.getInt("typeCode");
-        String[] points =  DB.rs.getString("area").lineSplit(",");
-        int nPoints = points.legnth;
+        String[] points =  DB.rs.getString("area").split(",");
+        int nPoints = points.length;
         float[] xCords = new float[nPoints];
         float[] yCords = new float[nPoints];
 
         for(int i = 0; i < nPoints; i++){
-          String[] point = points[i].lineSplit(" ");
-          xCords[i] = point[0];
-          yCords[i] = point[1];
+          String[] point = points[i].split(" ");
+          xCords[i] = Float.parseFloat(point[0]);
+          yCords[i] = Float.parseFloat(point[1]) ;
         }
         if(typeCode == 0){
-          legal.add(Polygon2D(yCords, xCords, nPoints));
+          legal.add(new Polygon2D(yCords, xCords, nPoints));
         }
         if(typeCode == 1){
-          ilegal.add(Polygon2D(yCords, xCords, nPoints));
+          illegal.add(new Polygon2D(yCords, xCords, nPoints));
         }
 //        System.out.println(points);
       }
@@ -56,8 +57,8 @@ public class AreaTest {
    * 
    */
   public boolean test(double xPoint, double yPoint){
-    for(int i = 0; i < ilegal.size(); i++){
-      if(ilegal.get(i).contains(xPoint, yPoint)){
+    for(int i = 0; i < illegal.size(); i++){
+      if(illegal.get(i).contains(xPoint, yPoint)){
         return false;
       }
     }
