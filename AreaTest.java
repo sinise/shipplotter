@@ -11,10 +11,7 @@ import java.text.SimpleDateFormat;
 public class AreaTest {
 //	public static void main(String[] args){
   public static void main(String[] args){
-    try {
-      double[] xCords = new double[nPoints]
-      double[] yCords = new double[nPoints]
-      int nPoints;
+/*    try {
 
       System.out.println("");
       String sql = "SELECT * FROM areas WHERE id > ? and id > ? and id > ? ORDER BY id";
@@ -25,9 +22,11 @@ public class AreaTest {
 
       while(DB.rs.next()){
         Integer typeCode = DB.rs.getInteger("typeCode");
-        String typeCode = DB.rs.getString("typeCode");
         String[] points =  DB.rs.getString("area").lineSplit(",");
         int nPoints = points.legnth;
+        double[] xCords = new double[nPoints];
+        double[] yCords = new double[nPoints];
+
         for(int i = 0; i < nPoints; i++){
           String[] point = points[i].lineSplit(" ");
           xCords[i] = Double.parseDouble(point[0]);
@@ -39,6 +38,6 @@ public class AreaTest {
 //      nPoints = points.length;
     } catch (Exception e) {
         System.out.println(e);
-      }
+      }*/
  }
 }
