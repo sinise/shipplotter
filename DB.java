@@ -31,7 +31,7 @@ public class DB
         con = DriverManager.getConnection(url, "shipplotter", "shipplotter");
     }
     catch (Exception e) {
-      System.out.println("Connection Failed! Check output console");
+      System.out.println("Connection Failed! Check output console" + e);
       return;
     }
     System.out.println("MySQL JDBC Driver Registered!");

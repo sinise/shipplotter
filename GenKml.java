@@ -57,7 +57,8 @@ public class GenKml {
 			ristyle.setAttribute("id", "restaurantIcon");
 			Element ricon = doc.createElement("Icon");
 			Element riconhref = doc.createElement("href");
-			riconhref.appendChild(doc.createTextNode("http://momentos.dk/track-none-yellow.png"));
+//			riconhref.appendChild(doc.createTextNode("http://momentos.dk/track-none-yellow.png"));
+	  		riconhref.appendChild(doc.createTextNode("http://earth.google.com/images/kml-icons/track-directional/track-none.png"));
 			rstyle.appendChild(ristyle);
 			ricon.appendChild(riconhref);
 			ristyle.appendChild(ricon);
