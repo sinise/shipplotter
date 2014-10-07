@@ -21,7 +21,6 @@ public class AreaTest {
     try {
 
       //get the arreas
-      System.out.println("");
       String sql = "SELECT * FROM areas WHERE id > ? and id > ? and id > ? ORDER BY id";
       DB DB = new DB();
       String next;
@@ -40,10 +39,10 @@ public class AreaTest {
           yCords[i] = Float.parseFloat(point[1]) ;
         }
         if(typeCode == 0){
-          legal.add(new Polygon2D(yCords, xCords, nPoints));
+          legal.add(new Polygon2D(xCords, yCords, nPoints));
         }
         if(typeCode == 1){
-          illegal.add(new Polygon2D(yCords, xCords, nPoints));
+          illegal.add(new Polygon2D(xCords, yCords, nPoints));
         }
 //        System.out.println(points);
       }
@@ -57,16 +56,18 @@ public class AreaTest {
    * 
    */
   public boolean test(double xPoint, double yPoint){
+    boolean rState = false;
+    for(int i = 0; i < legal.size(); i++){
+      if((legal.get(i).contains(xPoint, yPoint))){
+        rState = true;
+      }
+    }
     for(int i = 0; i < illegal.size(); i++){
       if(illegal.get(i).contains(xPoint, yPoint)){
-        return false;
+        rState = false;
       }
     }
-    for(int i = 0; i < legal.size(); i++){
-      if(!(legal.get(i).contains(xPoint, yPoint))){
-        return false;
-      }
-    }
-    return true;
+
+    return rState;
   }
 }
