@@ -84,12 +84,12 @@ public class DB
     int count = 0;
     try {
       connection = DriverManager.getConnection("jdbc:mysql://localhost/shipplotter", "shipplotter", "shipplotter");
-      for (int i = 0; i < line.length; i++)
+      for (int i = 49; i < line.length; i++)
       {
 	      String[] la = line[i].split(",");
               count++;
-	      if ((count % 1000) == 0) {
-                System.out.println(line[i]);
+	      if ((count % 10) == 0) {
+
               }
 	      preparedStatement = connection.prepareStatement("INSERT IGNORE INTO shipplotter values (?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?, ?)");
 	      preparedStatement.setString(1, la[0]);
@@ -116,6 +116,11 @@ public class DB
 	      preparedStatement.setString(22, la[21]);
 	      preparedStatement.executeUpdate();
       }
+                System.out.println(line[0]);
+                System.out.println(line[50]);
+                System.out.println(line[1]);
+                System.out.println(line[51]);
+
     } catch (SQLException e) {
     System.out.println("Connection Failed! Check output console");
     System.out.println(e);

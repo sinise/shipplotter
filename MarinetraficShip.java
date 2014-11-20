@@ -3,7 +3,7 @@ import java.io.*;
 import java.awt.Toolkit;
 import java.util.*;
 import java.text.SimpleDateFormat;
-
+import java.lang.String;
 /**
  * fetch content from Marinetrafic. either from a saved html file or from url
  * @param choice 0 to fecch online 1 to fetch from file
@@ -44,7 +44,7 @@ public class MarinetraficShip
         url = new URL(urlString);
       }
       catch (Exception e) {
-        System.err.println("Error: " + e.getMessage());
+        System.err.println("Error1: " + e.getMessage());
       }
     }
     /**
@@ -65,7 +65,7 @@ public class MarinetraficShip
         htmlName = name.replace(" ", "%20"); 
       }
       catch (Exception e) {
-        System.err.println("Error: " + e.getMessage());
+        System.err.println("Error2: " + e.getMessage());
       }
     }
 
@@ -96,8 +96,7 @@ public class MarinetraficShip
       if (sourceType == 2 || sourceType == 0) {
         System.out.println("sourcetype er " + sourceType);
 
-        urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/shipid:" + 110677 +"/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
-//	             http://www.marinetraffic.com/en/ais/index/positions/all/shipid:107083/mmsi:205197000/shipname:MFV%20Z90%20FRANCINE
+        urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/shipid:" + 107083 +"/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
         url = new URL(urlString);
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
@@ -107,15 +106,11 @@ public class MarinetraficShip
         uc.connect();
         in = new BufferedReader(new InputStreamReader(uc.getInputStream()));
         String ch;
-//        String regEx = "<span>1 of";
         String regEx = "</i></a></span></div>";
         while ((ch = in.readLine()) != null) {
-//   System.out.println(ch);
 
           if (ch.contains(regEx)) {
-//            int indexEnd = ch.lastIndexOf("</span>");
             int indexEnd = ch.lastIndexOf("type=") - 2;
-//            int  indexStart = ch.indexOf("<span>") + 11;
             int  indexStart = ch.indexOf("max=") + 5;
             lastPage = Integer.parseInt(ch.substring(indexStart, indexEnd));
             System.out.println(lastPage);
@@ -124,7 +119,7 @@ public class MarinetraficShip
         page = 0;
         for(int i = 0; page < lastPage + 1; i++) {
           try{
-            urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
+            urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/shipid:" + 107083 +"/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
             url = new URL(urlString);
             uc = url.openConnection();
             uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");
@@ -136,7 +131,8 @@ public class MarinetraficShip
             page++;
           }
             catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+            page = page - 1;
+            System.err.println("Error3:     " + e.getMessage());
           }
         }
       }
@@ -158,7 +154,7 @@ public class MarinetraficShip
       }
     }
     catch (Exception e) {
-      System.err.println("Error: " + e.getMessage());
+      System.err.println("Error4: " + e.getMessage());
     }
   }
 
@@ -167,39 +163,37 @@ public class MarinetraficShip
     try{
       String ch;
       String parsedData = "";
-      String regEx = "<td data-column=";
+      String regEx = "<td>";
       String regExNot = "<a href=";
-      String regStartLine = "<tr><td data-column=";
+      String regStartLine = "<time datetime=";
       while ((ch = in.readLine()) != null) {
-//          System.out.println(ch);
+        if (ch.contains(regEx)){
+          ch = in.readLine().trim();
 
-        if (ch.contains(regEx) && !(ch.contains(regExNot))) {
-//          System.out.println(ch);
-
-          int indexEnd = ch.lastIndexOf("</span>");
-          int  indexStart = ch.indexOf("<span>") + 6;
           if (ch.contains(regStartLine)) {
             if (parsedData.length() > 20){
               String[] lineSplit = parsedData.split(",");
               String time = lineSplit[0];
-              String speed = lineSplit[2];
-              String lon = lineSplit[3];
-              String lat = lineSplit[4];
-              String course = lineSplit[5];
+              String speed = lineSplit[1];
+              String lon = lineSplit[2];
+              String lat = lineSplit[3];
+              String course = lineSplit[4];
               list.add(mmsi + "," + time.substring(0, 10) + ",0," + type +"," + lat + "," + lon + "," + speed + "," + course + ",0,0,0,0," +
                        name + ",0,0,0,0,0,0,0,0,0");
             }
 
-            Date d = sdf.parse(ch.substring(indexStart, indexEnd));
+            int indexStartT = ch.indexOf("</time>") - 16;
+            int  indexEndT = ch.indexOf("</time");
+            Date d = sdf.parse(ch.substring(indexStartT, indexEndT));
             Calendar c = Calendar.getInstance();
             c.setTime(d);
             long timestamp = c.getTimeInMillis();
             parsedData = parsedData.valueOf(timestamp);
           }
           else {
-            parsedData = parsedData + ("," + ch.substring(indexStart, indexEnd));
-//           		System.out.println(parsedData);
-
+            if(!(ch.contains("href")) && !(ch.contains("AIS"))){
+            parsedData = parsedData + ("," + ch.replace("</td>", "").trim().replace(" kn",""));
+            }
           }
         }
       }
@@ -208,7 +202,7 @@ public class MarinetraficShip
       in.close();
     }
     catch (Exception e) {
-      System.err.println("Error: " + e.getMessage());
+      System.err.println("Error5: " + e.getMessage());
     }
   }
 }
