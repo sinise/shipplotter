@@ -96,7 +96,8 @@ public class MarinetraficShip
       if (sourceType == 2 || sourceType == 0) {
         System.out.println("sourcetype er " + sourceType);
 
-        urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
+        urlString = "http://www.marinetraffic.com/dk/ais/index/positions/all/shipid:" + 110677 +"/mmsi:" + mmsi +"/shipname:" + htmlName + "/per_page:50/page:" + page;
+//	             http://www.marinetraffic.com/en/ais/index/positions/all/shipid:107083/mmsi:205197000/shipname:MFV%20Z90%20FRANCINE
         url = new URL(urlString);
         uc = url.openConnection();
         uc.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:26.0) Gecko/20100101 Firefox/26.0");

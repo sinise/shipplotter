@@ -33,10 +33,13 @@ public class GenKml {
 
 	public static void makeKml(ResultSet rs, String filename, float speedTreshold, int timeFallout){
         int filePrefix = 0;
+
 //    ResultSet rs = args[0];
 //    String filname = args[1];
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+		String formatedTimeFallout = format.format(timeFallout * 1000);
+
 		try {
 
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -101,16 +104,15 @@ public class GenKml {
 				KML.lng = rs.getFloat("lon");
 				float speed = rs.getFloat("speed");
 				KML.type = rs.getString("type");
-        String speedValue;
 
-        //set the style from speedTreshold
-        if(speed < speedTreshold){
-          speedValue = "Low";
-        }
-        else{
-          speedValue = "High";
-        }
-
+			        String speedValue;
+			        //set the style from speedTreshold
+			        if(speed < speedTreshold){
+        	  			speedValue = "Low";
+        			}
+        			else{
+	          			speedValue = "High";
+        			}
 				String formatedTime = format.format(KML.timestamp * 1000);
 
 				Element placemark = doc.createElement("Placemark");
@@ -144,7 +146,6 @@ public class GenKml {
 					System.out.println("1");
 
 					Source src = new DOMSource(doc);
-  				String formatedTimeFallout = format.format(timeFallout * 1000);
 
 					Result dest = new StreamResult(new File(filename + "--" + formatedTimeFallout + "--" +filePrefix + ".kml"));
 					filePrefix++;
@@ -162,33 +163,30 @@ public class GenKml {
 
 
 
-			Element rxstyle = doc.createElement("Style");
-			rxstyle.setAttribute("id", "restaurantStyleLow");
-			Element rxistyle = doc.createElement("IconStyle");
-			rxistyle.setAttribute("id", "restaurantIcon");
-			Element rxicon = doc.createElement("Icon");
-			Element rxiconhref = doc.createElement("href");
-			rxiconhref.appendChild(doc.createTextNode("http://momentos.dk/track-none-yellow.png"));
-			rxstyle.appendChild(rxistyle);
-			rxicon.appendChild(rxiconhref);
-			rxistyle.appendChild(rxicon);
-			dnode.appendChild(rxstyle);
+					Element rxstyle = doc.createElement("Style");
+					rxstyle.setAttribute("id", "restaurantStyleLow");
+					Element rxistyle = doc.createElement("IconStyle");
+					rxistyle.setAttribute("id", "restaurantIcon");
+					Element rxicon = doc.createElement("Icon");
+					Element rxiconhref = doc.createElement("href");
+					rxiconhref.appendChild(doc.createTextNode("http://momentos.dk/track-none-yellow.png"));
+					rxstyle.appendChild(rxistyle);
+					rxicon.appendChild(rxiconhref);
+					rxistyle.appendChild(rxicon);
+					dnode.appendChild(rxstyle);
 					System.out.println("4");
 
-
-
-
-			    Element rhxstyle = doc.createElement("Style");
-			    rhxstyle.setAttribute("id", "restaurantStyleHigh");
-			    Element rhxistyle = doc.createElement("IconStyle");
-			    rhxistyle.setAttribute("id", "restaurantIcon");
-			    Element rhxicon = doc.createElement("Icon");
-			    Element rhxiconhref = doc.createElement("href");
-			    rhxiconhref.appendChild(doc.createTextNode("http://earth.google.com/images/kml-icons/track-directional/track-none.png"));
-			    rhxstyle.appendChild(rhxistyle);
-			    rhxicon.appendChild(rhxiconhref);
-			    rhxistyle.appendChild(rhxicon);
-			    dnode.appendChild(rhxstyle);
+			    		Element rhxstyle = doc.createElement("Style");
+			    		rhxstyle.setAttribute("id", "restaurantStyleHigh");
+			    		Element rhxistyle = doc.createElement("IconStyle");
+			    		rhxistyle.setAttribute("id", "restaurantIcon");
+			    		Element rhxicon = doc.createElement("Icon");
+			    		Element rhxiconhref = doc.createElement("href");
+			    		rhxiconhref.appendChild(doc.createTextNode("http://earth.google.com/images/kml-icons/track-directional/track-none.png"));
+			    		rhxstyle.appendChild(rhxistyle);
+			    		rhxicon.appendChild(rhxiconhref);
+			    		rhxistyle.appendChild(rhxicon);
+			    		dnode.appendChild(rhxstyle);
 
 					System.out.println("5");
 
@@ -207,18 +205,18 @@ public class GenKml {
 
 				}
 			}
-					System.out.println("7");
+			System.out.println("7");
 			Source src = new DOMSource(doc);
-					System.out.println("8");
-
-			Result dest = new StreamResult(new File(filename + "-" + filePrefix + ".kml")); 
-					System.out.println("9");
+			System.out.println("8");
+			Result dest = new StreamResult(new File(filename + "--" + formatedTimeFallout + "--" +filePrefix + ".kml"));
+//			Result dest = new StreamResult(new File(filename + "-" + filePrefix + ".kml")); 
+			System.out.println("9");
 			aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
-					System.out.println("10");
+			System.out.println("10");
 			aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-					System.out.println("11");
+			System.out.println("11");
 			aTransformer.transform(src, dest);
-					System.out.println("12");
+			System.out.println("12");
 			System.out.println("Completed.....");
 		} catch (Exception e){
 			System.out.println(e.getMessage());
