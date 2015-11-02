@@ -4,6 +4,9 @@ import java.io.*;
 import java.awt.Toolkit;
 import java.util.*;
 
+/**
+ * Inserts a polygons in the DB from a list of kml files.
+ */
 public class KMLtoDB {
   public static void main(String[] args) throws Exception {
     ArrayList<String> errors = new ArrayList<String>();

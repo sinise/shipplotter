@@ -5,7 +5,7 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 
 /**
- * fetch content from Naturerhvervstyrelsen. either from a saved html file
+ * Fetch content from a saved html file
  */
 
 public class Kvoter
@@ -15,10 +15,10 @@ public class Kvoter
   private String file;
   private String area;
     /**
-     *Constructor for a Marinetrafic ship to fetch from url
-     *@param mmsi mmsi of ship
-     *@param name name of ship entered exactly as marinetrafic does. is casesentitive
-     *@param file file to fetch from
+     *Constructor for Kvoter wchich is used to parse data about kvoter
+     *from a html file to the DB
+     *@param file html file
+     *@param area the name of the area
      */
     public Kvoter(String file, String area) {
       this.area = area;

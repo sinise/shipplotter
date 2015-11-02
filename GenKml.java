@@ -31,21 +31,24 @@ public class GenKml {
 	public String type;
 	public long timestamp;
 
+ /* Generate a kml file to use in google earth
+  * @rs the resultset containing the points
+  * @filname output filename
+  * @SpeedTreshold speed higer than this has another color
+  * @timeFallout for how long time the fallOut was.
+  */
 	public static void makeKml(ResultSet rs, String filename, float speedTreshold, int timeFallout){
         int filePrefix = 0;
 
-//    ResultSet rs = args[0];
-//    String filname = args[1];
 		GenKMLPlaceMarker KML = new GenKMLPlaceMarker();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		String formatedTimeFallout = format.format(timeFallout * 1000);
 
 		try {
-
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			TransformerFactory tranFactory = TransformerFactory.newInstance(); 
-		        Transformer aTransformer = tranFactory.newTransformer(); 
+			TransformerFactory tranFactory = TransformerFactory.newInstance();
+      Transformer aTransformer = tranFactory.newTransformer();
 
 			Document doc = builder.newDocument();
 			Element root = doc.createElement("kml");
@@ -60,7 +63,6 @@ public class GenKml {
 			ristyle.setAttribute("id", "restaurantIcon");
 			Element ricon = doc.createElement("Icon");
 			Element riconhref = doc.createElement("href");
-//			riconhref.appendChild(doc.createTextNode("http://momentos.dk/track-none-yellow.png"));
 	  		riconhref.appendChild(doc.createTextNode("http://earth.google.com/images/kml-icons/track-directional/track-none.png"));
 			rstyle.appendChild(ristyle);
 			ricon.appendChild(riconhref);
@@ -95,7 +97,6 @@ public class GenKml {
 			int count = 0;
 			while(rs.next()){
 				count++;
-//					System.out.printf("lines %d\n "+filename, count);
 				KML.timestamp = rs.getLong("timestamp");
 				KML.id = rs.getInt("mmsi");
 				KML.name = rs.getString("name");
@@ -118,9 +119,6 @@ public class GenKml {
 				Element placemark = doc.createElement("Placemark");
 				dnode.appendChild(placemark);
 
-//				Element name = doc.createElement("name");
-//				name.appendChild(doc.createTextNode(KML.name));
-//				placemark.appendChild(name);
 
 				Element descrip = doc.createElement("description");
 				descrip.appendChild(doc.createTextNode("s " + speed + "  " + KML.name + "  time " + formatedTime));
@@ -143,7 +141,6 @@ public class GenKml {
 				placemark.appendChild(point);
 				if(count % 10000 == 0) {
 					System.out.printf("lines %d\n", count);
-					System.out.println("1");
 
 					Source src = new DOMSource(doc);
 
@@ -152,7 +149,6 @@ public class GenKml {
 					aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
 					aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 					aTransformer.transform(src, dest);
-					System.out.println("2");
 
 					doc = builder.newDocument();
 					root = doc.createElement("kml");
@@ -174,7 +170,6 @@ public class GenKml {
 					rxicon.appendChild(rxiconhref);
 					rxistyle.appendChild(rxicon);
 					dnode.appendChild(rxstyle);
-					System.out.println("4");
 
 			    		Element rhxstyle = doc.createElement("Style");
 			    		rhxstyle.setAttribute("id", "restaurantStyleHigh");
@@ -188,35 +183,14 @@ public class GenKml {
 			    		rhxistyle.appendChild(rhxicon);
 			    		dnode.appendChild(rhxstyle);
 
-					System.out.println("5");
-
-/*
-					bistyle = doc.createElement("IconStyle");
-					bistyle.setAttribute("id", "barIcon");
-					bicon = doc.createElement("Icon");
-					biconhref = doc.createElement("href");
-					biconhref.appendChild(doc.createTextNode("http://maps.google.com/mapfiles/kml/pal2/icon27.png"));
-					bstyle.appendChild(bistyle);
-					bicon.appendChild(biconhref);
-					bistyle.appendChild(bicon);
-					dnode.appendChild(bstyle);
-*/
-					System.out.println("6");
 
 				}
 			}
-			System.out.println("7");
 			Source src = new DOMSource(doc);
-			System.out.println("8");
 			Result dest = new StreamResult(new File(filename + "--" + formatedTimeFallout + "--" +filePrefix + ".kml"));
-//			Result dest = new StreamResult(new File(filename + "-" + filePrefix + ".kml")); 
-			System.out.println("9");
 			aTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			System.out.println("10");
 			aTransformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-			System.out.println("11");
 			aTransformer.transform(src, dest);
-			System.out.println("12");
 			System.out.println("Completed.....");
 		} catch (Exception e){
 			System.out.println(e.getMessage());

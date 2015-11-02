@@ -5,8 +5,8 @@ import java.util.*;
 import java.text.SimpleDateFormat;
 
 /**
- * fetch content from Marinetrafic. either from a saved html file or from url
- * @param choice 0 to fecch online 1 to fetch from file
+ * Format a kml file containing a polygon so it can be added to the DB
+ * 
  */
 
 public class KmlToDBHandler
@@ -17,10 +17,10 @@ public class KmlToDBHandler
   public String type;
   private String file;
     /**
-     *Constructor for a polygon in kml
+     *Constructor
      *@param file the kml file containing a polygon
      */
-    public KmlToDBHandler(String file) {
+  public KmlToDBHandler(String file) {
       try {
         this.file = file;
       }
@@ -53,7 +53,9 @@ public class KmlToDBHandler
     }
   }
 
-// trim the data and put in the array list which can be acceced from other classes
+ /**
+  * Trim the data and put it in the public arrayList pointList
+  */
   public void trimData() {
     try{
       String ch;
@@ -63,7 +65,6 @@ public class KmlToDBHandler
       String regP3 = "<name>";
       //set typeName of area
       while((ch = in.readLine()) != null && typeName.equals("null")){
-//          System.out.println(ch);
         if (ch.contains(regExName) && typeName == "null"){
           int indexStart = ch.indexOf("<name>" );
           int indexEnd = ch.lastIndexOf("</name>");
@@ -92,8 +93,6 @@ public class KmlToDBHandler
           while(!(ch = in.readLine()).contains("</coordinates>")){
             if (ch.contains("<coordinates>")){
               String line = typeName + ":" + polyName + ":" + in.readLine();
-//              System.out.println(line);
-//              System.out.println("---------------------------------------------------");
               pointList.add(line);
             }
           }

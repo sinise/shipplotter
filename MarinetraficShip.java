@@ -204,8 +204,8 @@ lastLine = 1;
               if(lineSplit.length == 4){break;}
               String time = lineSplit[0];
               String speed = lineSplit[1];
-              String lan = lineSplit[2];
-              String lot = lineSplit[3];
+              String lat = lineSplit[2];
+              String lon = lineSplit[3];
               String course = lineSplit[4];
               list.add(mmsi + "," + time.substring(0, 10) + ",0," + type +"," + lat + "," + lon + "," + speed + "," + course + ",0,0,0,0," +
                        name + ",0,0,0,0,0,0,0,0,0");

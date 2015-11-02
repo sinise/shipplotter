@@ -15,7 +15,7 @@ public class AreaTest {
 
 
   /**
-   *  Construkter for AreaTest.
+   *  Constructor
    */
   public AreaTest(){
     try {

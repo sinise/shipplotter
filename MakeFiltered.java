@@ -39,8 +39,6 @@ public class MakeFiltered {
 
       //For each ship create kmlfiles
     while ((ship = in.readLine()) != null) {
-      System.out.println("start whileloop");
-
       int filePrefix = 0;
       String[] newShip = ship.split(",");
       String mmsi = newShip[0];

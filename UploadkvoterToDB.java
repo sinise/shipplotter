@@ -1,6 +1,11 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.sql.*;
+
+
+/*
+ * Upload kvoter to database
+ */
 public class UploadkvoterToDB
 {
   public void upload(String[] line) throws Exception
